@@ -1,0 +1,79 @@
+*, *::before,*::after {
+    text-decoration: none;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+    font-family: Helvetica;
+}
+
+.logout_form {
+    position: fixed;
+    right: 10px;
+    top: 10px;
+}
+.logout_form button {
+    color: white;
+    font-size: 1.3rem;
+    height: 2rem;
+    background-color: red;
+    cursor: pointer;
+    border: none;
+    padding: .3rem;
+}
+
+.menu {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    display: flex;
+    margin: auto;
+    min-height: 100vh;
+    width: 100vw;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 2rem;
+}
+.menu .nav_row {
+    display: flex;
+    width: 50%;
+    justify-content: space-evenly;
+}
+.menu .nav_row .card {
+    width: 10rem;
+    height: 10rem;
+    max-height: 100%;
+    background-color: red;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: .5rem;
+    align-items: center;
+    font-size: 1.3rem;
+    color: white;
+    font-weight: bold;
+}
+
+@media(min-width:801px)
+{
+    .menu {
+        min-height: 100vh;
+        padding: 0;
+        justify-content: center;
+    }
+}
+
+@media(max-width:800px)
+{
+    .menu .nav_row {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2rem;
+        width: 100%;
+    }
+    .menu .nav_row .card {
+        width: 8rem;
+        height: 8rem;
+    }
+}
