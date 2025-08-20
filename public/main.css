@@ -54,6 +54,14 @@
     font-weight: bold;
 }
 
+.page {
+    height: 100vh;
+    width: 100vw;
+}
+.hidden {
+    display: none;
+}
+
 @media(max-width:800px)
 {
     .menu .nav_row {
