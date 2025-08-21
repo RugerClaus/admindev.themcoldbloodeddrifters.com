@@ -12,9 +12,11 @@ class DashboardController extends Controller
     {
         // Get the currently logged-in user
         $user = Auth::user();
+        $users = User::all();
 
         $data = [
-            'user' => $user
+            'user' => $user,
+            'users' => $users
         ];
 
         return view('dashboard', ['data' => $data]);
