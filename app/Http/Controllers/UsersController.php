@@ -29,7 +29,7 @@ class UsersController extends Controller
         $request->validate([
             'id'       => ['required', 'integer', 'exists:users,id'],
             'username' => ['required', 'string'],
-            'password' => ['nullable', 'string', 'min:6'],
+            'password' => ['nullable', 'string', 'min:4'],
         ]);
 
         $user = User::findOrFail($request->id);
