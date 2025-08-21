@@ -48,10 +48,8 @@
                     @if(auth()->user()->isAdmin())
                         <div class="card" data-target="user_editor">
                             <div class="inner_card">
-                                <div>Add</div>
-                                <div>or</div>
-                                <div>Remove</div>
-                                <div>Members</div>
+                                <div>User</div>
+                                <div>Manager</div>
                             </div>
                         </div>
                     @endif
