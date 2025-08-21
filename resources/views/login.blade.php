@@ -7,6 +7,9 @@
 </head>
 <body>
     <style>
+        body {
+            background-color: rgba(255, 157, 0, 1);
+        }
         *, *::before,*::after {
             text-decoration: none;
             margin: 0;
@@ -28,7 +31,7 @@
         section form {
             width: 30rem;
             height: 30rem;
-            background-color: lightblue;
+            background-color: rgba(0, 0, 0, .4);
             display: flex;
             flex-direction: column;
             justify-content: space-evenly;
@@ -41,11 +44,16 @@
 
         section form button {
             font-size: 2rem;
-            background-color: blue;
-            border: 2px solid darkblue;
+            background-color: rgba(215, 167, 0, .7);
+            border: 2px solid rgba(171, 107, 3, 1);
             color: white;
             border-radius: 1rem;
-            padding: 5px
+            padding: 5px;
+            cursor: pointer;
+        }
+
+        section form button:hover {
+            background-color: rgba(0, 0, 0, .7)
         }
 
         section form .image_container {

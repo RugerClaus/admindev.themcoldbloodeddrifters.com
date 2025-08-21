@@ -114,6 +114,17 @@
     font-size: 1.3rem;
 }
 
+.users table tr td input {
+    font-size: 1.3rem;
+    border: none;
+    width: 100%;
+}
+
+.users table tr td input:active {
+    border: none;
+    width: 100%;
+}
+
 .users table tr td button {
     border: none;
 }
