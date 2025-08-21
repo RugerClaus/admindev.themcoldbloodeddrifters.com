@@ -90,25 +90,25 @@
                         <button type="submit">Add User</button>
                     </form>
                 </section>
-                <table class="users_table">
-                    <tr>
-                        <th>Username</th>
-                        <th>Password</th>
-                        <th>Modify</th>
-                    </tr>
-                    @foreach ($data['users'] as $user)
-                        <tr id="user-{{ $user->id }}">
-                            <td class="username">{{ $user->username }}</td>
-                            
-                            
-                            @if ($user->username != 'admin')
-                                <td class="password">{{ $user->password }}</td>
-                                <td><button class="edit_user" data-id="{{ $user->id }}">Edit</button></td>
-                                <td><button class="delete_user" data-id="{{ $user->id }}">Delete</button></td>
-                            @endif
-                        </tr>
-                    @endforeach
-                </table>
+                    <div class="table-container">
+                        <table class="users_table">
+                            <tr>
+                                <th>Username</th>
+                                <th>Password</th>
+                                <th>Modify</th>
+                            </tr>
+                            @foreach ($data['users'] as $user)
+                            <tr id="user-{{ $user->id }}">
+                                <td class="username">{{ $user->username }}</td>
+                                @if ($user->username != 'admin')
+                                    <td class="password">**************</td>
+                                    <td><button class="edit_user" data-id="{{ $user->id }}">Edit</button></td>
+                                    <td><button class="delete_user" data-id="{{ $user->id }}">Delete</button></td>
+                                @endif
+                            </tr>
+                            @endforeach
+                        </table>
+                    </div>
             </section>
             <script src="{{asset('scripts/pages/user_editor.js')}}"></script>
         </section>

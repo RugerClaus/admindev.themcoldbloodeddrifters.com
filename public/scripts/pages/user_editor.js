@@ -68,7 +68,7 @@ function attachEditHandler(row) {
 
                     if (data.success) {
                         usernameCell.textContent = data.user.username;
-                        passwordCell.textContent = data.user.password;
+                        passwordCell.textContent = '**************';
                         editBtn.textContent = 'Edit';
                         editBtn.classList.remove('save_user');
                         editBtn.classList.add('edit_user');
@@ -83,7 +83,7 @@ function attachEditHandler(row) {
                 // Edit mode
                 const currentUsername = usernameCell.textContent;
                 usernameCell.innerHTML = `<input type="text" value="${currentUsername}">`;
-                passwordCell.innerHTML = `<input type="password" placeholder="New password">`;
+                passwordCell.innerHTML = `<input type="password" placeholder="**************">`;
                 editBtn.textContent = 'Save';
                 editBtn.classList.add('save_user');
                 editBtn.classList.remove('edit_user');
@@ -119,7 +119,7 @@ document.getElementById('add-user-form').addEventListener('submit', async functi
         newRow.id = `user-${data.user.id}`;
         newRow.innerHTML = `
             <td class="username">${data.user.username}</td>
-            <td class="password">${data.user.password}</td>
+            <td class="password">**************</td>
             <td><button class="edit_user" data-id="${data.user.id}">Edit</button></td>
             <td><button class="delete_user" data-id="${data.user.id}">Delete</button></td>
         `;
