@@ -8,7 +8,7 @@
 </head>
 <body>
     <section id="login">
-        <h1>Log In</h1>
+        <h1>Password no longer valid. Please choose a new password.</h1>
         <form id="login_form" method="POST" action="/users/must_change_password">
             @csrf
 
