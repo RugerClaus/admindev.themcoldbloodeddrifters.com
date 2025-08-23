@@ -18,14 +18,5 @@ class UserSeeder extends Seeder
                 'must_change_password' => false,
             ]
         );
-
-        User::updateOrCreate(
-            ['username' => 'user'],
-            [
-                'password' => Hash::make('test'),
-                'permission_level' => 'user',
-                'must_change_password' => true
-            ]
-        );
     }
 }
