@@ -68,18 +68,20 @@
 
         
     });
-    const show_pass_button = document.getElementById('show_password');
-    const passfield = document.getElementById('password_field');
+    </script>
+    <script>
+        const show_pass_button = document.getElementById('show_password');
+        const passfield = document.getElementById('password_field');
 
-    function toggle_show_pass() {
-        if (passfield.type === 'password') {
-            passfield.type = 'text';
-            show_pass_button.src = "{{ asset('assets/siteimg/hide_pass.png') }}";
-        } else {
-            passfield.type = 'password';
-            show_pass_button.src = "{{ asset('assets/siteimg/show_pass.png') }}";
+        function toggle_show_pass() {
+            if (passfield.type === 'password') {
+                passfield.type = 'text';
+                show_pass_button.src = "{{ asset('assets/siteimg/hide_pass.png') }}";
+            } else {
+                passfield.type = 'password';
+                show_pass_button.src = "{{ asset('assets/siteimg/show_pass.png') }}";
+            }
         }
-    }
     </script>
 
 </body>
