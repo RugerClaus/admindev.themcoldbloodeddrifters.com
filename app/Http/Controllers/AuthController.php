@@ -22,8 +22,14 @@ class AuthController extends Controller
         ]);
 
         if (Auth::attempt($credentials)) {
-            $request->session()->regenerate(); // important to prevent session fixation
-            return redirect()->intended('/dashboard'); // your SPA page
+            if (auth()->user()->must_change_password) {
+                return redirect()->route('must.change.password');
+            }
+            else{
+                $request->session()->regenerate();
+                return redirect()->intended('/dashboard');
+            }
+            
         }
 
         throw ValidationException::withMessages([

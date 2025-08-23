@@ -21,4 +21,9 @@ class DashboardController extends Controller
 
         return view('dashboard', ['data' => $data]);
     }
+
+    public function change_password()
+    {
+        return view('change_password');
+    }
 }

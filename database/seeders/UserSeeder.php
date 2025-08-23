@@ -11,18 +11,20 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         User::updateOrCreate(
-            ['username' => 'admin'], // search criteria
+            ['username' => 'admin'],
             [
                 'password' => Hash::make(env('ADMIN_PASSWORD')),
                 'permission_level' => 'admin',
+                'must_change_password' => false,
             ]
         );
 
         User::updateOrCreate(
-            ['username' => 'user'], // search criteria
+            ['username' => 'user'],
             [
                 'password' => Hash::make('test'),
                 'permission_level' => 'user',
+                'must_change_password' => true
             ]
         );
     }

@@ -1,0 +1,81 @@
+body {
+    background-color: rgba(255, 157, 0, 1);
+}
+*, *::before,*::after {
+    text-decoration: none;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+    font-family: Helvetica;
+}
+section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-width: 100vw;
+    height: 100vh;
+    gap: 2rem;
+}
+section form {
+    width: 30rem;
+    height: 30rem;
+    background-color: rgba(0, 0, 0, .4);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+section form input {
+    font-size: 2rem;
+    width: 90%;
+}
+
+section form button {
+    font-size: 2rem;
+    background-color: rgba(215, 167, 0, .7);
+    border: 2px solid rgba(171, 107, 3, 1);
+    color: white;
+    border-radius: 1rem;
+    padding: 5px;
+    cursor: pointer;
+}
+
+section form button:hover {
+    background-color: rgba(0, 0, 0, .7);
+}
+
+section form .image_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+section form .image_container img {
+    max-width: 80%;
+    object-fit: contain;
+}
+
+section form .password {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 90%;
+}
+section form .password .show_button {
+    object-fit: contain;
+}
+
+@media(max-width:800px)
+{
+    section form {
+        width: 90%;
+    }
+
+    section form input {
+        font-size: 1.8rem;
+    }
+}

@@ -3,81 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{asset('auth.css')}}">
     <title>Coldblooded Admin Login</title>
 </head>
 <body>
-    <style>
-        body {
-            background-color: rgba(255, 157, 0, 1);
-        }
-        *, *::before,*::after {
-            text-decoration: none;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            scroll-behavior: smooth;
-            font-family: Helvetica;
-        }
-        section {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            min-width: 100vw;
-            height: 100vh;
-            gap: 2rem;
-        }
-        section form {
-            width: 30rem;
-            height: 30rem;
-            background-color: rgba(0, 0, 0, .4);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-evenly;
-            align-items: center;
-        }
-
-        section form input {
-            font-size: 2rem;
-        }
-
-        section form button {
-            font-size: 2rem;
-            background-color: rgba(215, 167, 0, .7);
-            border: 2px solid rgba(171, 107, 3, 1);
-            color: white;
-            border-radius: 1rem;
-            padding: 5px;
-            cursor: pointer;
-        }
-
-        section form button:hover {
-            background-color: rgba(0, 0, 0, .7)
-        }
-
-        section form .image_container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        section form .image_container img {
-            max-width: 80%;
-            object-fit: contain;
-        }
-        @media(max-width:800px)
-        {
-            section form {
-                width: 90%;
-            }
-
-            section form input {
-                font-size: 1.8rem;
-            }
-        }
-        
-    </style>
     <section id="login">
         <h1>Log In</h1>
         <form id="login_form" method="POST" action="/authenticate">
@@ -87,12 +16,33 @@
                 <img src="https://media.themcoldbloodeddrifters.com/assets/admin/adminlogo.png" alt="">
             </div>
 
-            <input type="text" name="username" placeholder="Username" required /><br/>
-            <input type="password" name="password" placeholder="Password" required /><br/>
+            <input type="text" name="username" placeholder="Username" required />
+            <div class="password">
+                <input id="password_field" type="password" name="password" placeholder="Password" required />
+                <img src="{{asset('assets/siteimg/show_pass.png')}}" class="show_button" id="show_password" onclick="toggle_show_pass()">
+            </div>
             <button type="submit">Log In</button>
+        
         </form>
-        <p id="login_error" style="color:red;"></p>
+        @if ($errors->any())
+            <p id="login_error" style="color:red; position:absolute;z-index:10;bottom:3rem;display:flex;justify-content:center;align-items:center;">
+                {{ $errors->first() }}
+            </p>
+        @endif
     </section>
+    <script>
+        const show_pass_button = document.getElementById('show_password');
+        const passfield = document.getElementById('password_field');
 
+        function toggle_show_pass() {
+            if (passfield.type === 'password') {
+                passfield.type = 'text';
+                show_pass_button.src = "{{ asset('assets/siteimg/hide_pass.png') }}";
+            } else {
+                passfield.type = 'password';
+                show_pass_button.src = "{{ asset('assets/siteimg/show_pass.png') }}";
+            }
+        }
+    </script>
 </body>
 </html>

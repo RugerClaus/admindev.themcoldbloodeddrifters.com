@@ -31,7 +31,6 @@ window.addEventListener('hashchange', () => {
     if (target) {
         showPage(target)
     } else {
-        // No hash -> show menu
         document.querySelectorAll('.page').forEach(page => page.classList.add('hidden'))
         document.querySelector('.menu').classList.remove('hidden')
     }

@@ -15,11 +15,68 @@
 .logout_form button {
     color: white;
     font-size: 1.3rem;
-    height: 2rem;
     background-color: red;
     cursor: pointer;
     border: none;
+    padding: 4px;
+}
+
+.change_password_button {
+    position: fixed;
+    color: black;
+    font-size: 1.3rem;
+    height: 2rem;
+    background-color: white;
+    cursor: pointer;
+    border: 1px solid black;
     padding: .3rem;
+    left: 2rem;
+    top: 10px;
+    padding: 2px;
+}
+
+.change_password_button:hover {
+    background-color: lightcoral;
+}
+
+.change_password_modal {
+    position: absolute;
+    z-index: 10;
+    top: 3rem;
+    left: 2rem;
+    border: 1px solid black;
+    background-color: rgba(0, 0, 0, 0.5);
+    margin-left: auto;
+    margin-right: auto;
+    padding: 5px;
+}
+
+.change_password_modal form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.change_password_modal form .password{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.change_password_modal form input {
+    font-size: 2rem;
+}
+
+.change_password_modal form button {
+    font-size: 2rem;
+    background-color: white;
+    border-radius: none;
+}
+
+.change_password_modal form button:hover {
+    background-color: lightcoral;
 }
 
 .close_section_button {
@@ -165,6 +222,30 @@
 
 @media(max-width:800px)
 {
+    .change_password_modal {
+        width: 90%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .change_password_modal form {
+        gap: .3rem;
+    }
+
+    .change_password_modal form input {
+        width: 90%;
+        font-size: 1.3rem;
+    }
+
+    .change_password_modal form .password{
+        align-self: flex-start;
+    }
+
+    .change_password_modal form button {
+        align-self: flex-end;
+        font-size: 1.3rem;
+    }
+
     .menu .nav_row {
         flex-direction: column;
         align-items: center;

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 
 class UsersController extends Controller
@@ -45,6 +46,7 @@ class UsersController extends Controller
 
         if ($request->filled('password')) {
             $user->password = Hash::make($request->password);
+            $user->must_change_password = true;
         }
 
         $user->save();
@@ -66,12 +68,62 @@ class UsersController extends Controller
         $user = new User();
         $user->username = $request->username;
         $user->password = Hash::make($request->password);
+        $user->must_change_password = true;
         $user->save();
         return response()->json([
             'success' => true,
             'message' => 'User added successfully',
             'user' => $user->makeVisible('password')->toArray(),
         ]);
+    }
+
+    public function user_change_password(Request $request)
+    {
+        $request->validate([
+            'password' => ['required', 'string', 'min:12', 'confirmed'],
+        ]);
+
+        $user = auth()->user();
+
+        if (Hash::check($request->password, $user->password)) {
+            return back()->withErrors(['password' => 'You cannot reuse your current password.']);
+        }
+
+        $user->update([
+            'password' => Hash::make($request->password),
+            'must_change_password' => false,
+        ]);
+
+        
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('login')->with('status', 'Password updated. Please log in again.');
+    }
+
+    public function must_change_password(Request $request)
+    {
+        $request->validate([
+            'current_password' => ['required', 'string'],
+            'password' => ['required', 'string', 'min:12', 'confirmed'],
+        ]);
+
+        $user = auth()->user();
+
+        if (!Hash::check($request->current_password, $user->password)) {
+            return back()->withErrors(['current_password' => 'Current password is incorrect.']);
+        }
+
+        $user->update([
+            'password' => Hash::make($request->password),
+            'must_change_password' => false,
+        ]);
+
+        $request->session()->regenerate();
+
+        return redirect()->route('dashboard')->with('status', 'Password updated successfully.');
     }
 
 }
