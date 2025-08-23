@@ -87,6 +87,7 @@
     position: fixed;
     left: 2rem;
     top: 10px;
+    cursor: pointer;
 }
 
 .menu {
