@@ -16,12 +16,12 @@
                 <img src="https://media.themcoldbloodeddrifters.com/assets/admin/adminlogo.png" alt="">
             </div>
             <div class="password">
-                <input type="password" name="current_password" placeholder="Current Password">
-                <img src="{{asset('assets/siteimg/show_pass.png')}}" class="show_button" id="show_password" onclick="toggle_show_pass()">
+                <input type="password" name="current_password" class="password_field" placeholder="Current Password">
+                <img src="{{asset('assets/siteimg/show_pass.png')}}" class="show_button" onclick="toggle_show_pass(this)">
             </div>
             <div class="password">
-                <input type="password" name="password" placeholder="New Password" required />
-                <img src="{{asset('assets/siteimg/show_pass.png')}}" class="show_button" id="show_password" onclick="toggle_show_pass()">
+                <input type="password" name="password" class="password_field" placeholder="New Password" required />
+                <img src="{{asset('assets/siteimg/show_pass.png')}}" class="show_button" onclick="toggle_show_pass(this)">
             </div>
             <input type="password" name="password_confirmation" placeholder="Confirm New Password" required /><br/>
             <button type="submit">Log In</button>
@@ -70,16 +70,15 @@
     });
     </script>
     <script>
-        const show_pass_button = document.getElementById('show_password');
-        const passfield = document.getElementById('password_field');
+        function toggle_show_pass(button) {
+            const passfield = button.parentElement.querySelector('.password_field');
 
-        function toggle_show_pass() {
             if (passfield.type === 'password') {
                 passfield.type = 'text';
-                show_pass_button.src = "{{ asset('assets/siteimg/hide_pass.png') }}";
+                button.src = "{{ asset('assets/siteimg/hide_pass.png') }}";
             } else {
                 passfield.type = 'password';
-                show_pass_button.src = "{{ asset('assets/siteimg/show_pass.png') }}";
+                button.src = "{{ asset('assets/siteimg/show_pass.png') }}";
             }
         }
     </script>
