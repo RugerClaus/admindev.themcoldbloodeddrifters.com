@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UsersController;
+use App\Http\Controllers\MessageController;
+
 
 Route::get('/', function () {
     if (!auth()->check()) {
@@ -25,6 +27,8 @@ Route::post('/authenticate', [AuthController::class, 'login']);
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class,'init'])->name('dashboard');
     Route::get('/users/change_password', [DashboardController::class, 'change_password'])->name('must.change.password');
+    Route::get('/load_messages', [MessageController::class, 'load_messages']);
+
 
     Route::post('/users/add', [UsersController::class, 'add']);
     Route::post('/users/update', [UsersController::class, 'update']);

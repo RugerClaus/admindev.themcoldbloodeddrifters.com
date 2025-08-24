@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\ContactMessages;
 
 class DashboardController extends Controller
 {
@@ -13,10 +14,13 @@ class DashboardController extends Controller
         // Get the currently logged-in user
         $user = Auth::user();
         $users = User::all();
+        $messages = ContactMessages::all();
+        
 
         $data = [
             'user' => $user,
-            'users' => $users
+            'users' => $users,
+            'messages' => $messages
         ];
 
         return view('dashboard', ['data' => $data]);
