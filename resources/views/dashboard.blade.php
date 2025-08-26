@@ -174,11 +174,14 @@
         </section>
         <section id="messages" class="page hidden">
             <button class="close_section_button"><-- back to menu</button>
-            @foreach ($data['messages'] as $message)
-                <div class="message_preview">
-                    <div class="from">{{$message->name}}</div>
-                </div>
-            @endforeach
+            <div class="message_previews">
+                @foreach ($data['messages'] as $message)
+                    <div class="message_preview">
+                        <div class="from">{{$message->name}}</div>
+                        <div class="message">{{$message->body}}</div>
+                    </div>
+                @endforeach
+            </div>
         </section>
         
         <section id="user_editor" class="page hidden">
