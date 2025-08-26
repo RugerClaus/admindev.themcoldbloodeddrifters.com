@@ -13,12 +13,14 @@ class MessageTableSeeder extends Seeder
      */
     public function run(): void
     {
-        for ($i = 1; $i <= 5; $i++) {
+        for ($i = 1; $i <= 21; $i++) {
             ContactMessages::create([
                 'name' => "User $i",
                 'subject' => $i % 2 === 0 ? 'inquiry' : 'book',
-                'phone' => '555-1234' . $i,
+                'email' => 'test@example.com',
+                'phone' => '789-555-1234' . $i,
                 'body' => "This is a test message number $i.",
+                'read' => false,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

@@ -60,7 +60,6 @@
                         return;
                     }
 
-                    // Check match
                     if (password !== confirm) {
                         e.preventDefault();
                         errorEl.textContent = "Passwords do not match.";
@@ -111,7 +110,7 @@
                     }
                 }
             </script>
-        @endif
+            @endif
             <div class="nav_row">
                 <div class="card" data-target="home_editor">
                     <div class="inner_card">
@@ -176,12 +175,52 @@
             <button class="close_section_button"><-- back to menu</button>
             <div class="message_previews">
                 @foreach ($data['messages'] as $message)
-                    <div class="message_preview">
-                        <div class="from">{{$message->name}}</div>
-                        <div class="message">{{$message->body}}</div>
+                    <div class="message_preview_wrapper {{ $message->read ? 'message_read' : 'message_unread' }}" data-id="{{ $message->id }}">
+                        <div class="from"><b>From: </b>{{ $message->name }}</div>
+                        <div class="email"><b>Email: </b> {{$message->email}}</div>
+                        <div class="phone"><b>Phone: </b> {{$message->phone}}</div>
+                        <div class="message">{{ \Illuminate\Support\Str::limit($message->body, 30) }}</div>
                     </div>
                 @endforeach
             </div>
+            <div class="message_viewer"></div>
+                <script>
+                    const messages = document.querySelectorAll('.message_preview_wrapper');
+                    const message_viewer = document.querySelector('.message_viewer')
+
+                    const container = document.querySelector('.message_previews');
+
+                    messages.forEach(message => {
+                        message.addEventListener('click', async () => {
+                            const messageId = message.dataset.id;
+
+                            try {
+                                const res = await fetch('/messages/mark_message_as_read', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                                    },
+                                    body: JSON.stringify({ id: messageId })
+                                });
+
+                                const data = await res.json();
+
+                                if (data.success) {
+                                    message.classList.remove('message_unread');
+                                    message.classList.add('message_read');
+
+                                    // move message to the bottom (or after last read message)
+                                    container.appendChild(message);
+                                } else {
+                                    console.error('Failed to mark message as read');
+                                }
+                            } catch (err) {
+                                console.error('Error:', err);
+                            }
+                        });
+                    });
+            </script>
         </section>
         
         <section id="user_editor" class="page hidden">

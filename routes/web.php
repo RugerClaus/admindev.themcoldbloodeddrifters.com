@@ -36,5 +36,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/users/get_user_info', [UsersController::class, 'read']);
     Route::post('/users/must_change_password', [UsersController::class, 'must_change_password']);
     Route::post('/users/user_change_password', [UsersController::class, 'user_change_password']);
+
+    Route::post('/messages/mark_message_as_read', [MessageController::class, 'mark_message_as_read']);
+
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
