@@ -14,7 +14,7 @@ class DashboardController extends Controller
         // Get the currently logged-in user
         $user = Auth::user();
         $users = User::all();
-        $messages = ContactMessages::all();
+        $messages = ContactMessages::orderBy('id','desc')->get();
         
 
         $data = [

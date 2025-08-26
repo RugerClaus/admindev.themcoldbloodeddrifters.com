@@ -10,11 +10,9 @@ class MessageController extends Controller
 {
     public function load_messages()
     {
-        $messages = ContactMessages::orderBy('read')->orderBy('created_at', 'desc')->get();
+        $messages = ContactMessages::orderBy('created_at','desc')->get();
 
-        return response()->json([
-            'messages' => $messages
-        ]);
+        return response()->json($messages);
     }
 
     public function mark_message_as_read(Request $request)

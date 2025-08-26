@@ -174,21 +174,24 @@
         <section id="messages" class="page hidden">
             <button class="close_section_button"><-- back to menu</button>
             <div class="message_previews">
-                @foreach ($data['messages'] as $message)
-                    <div class="message_preview_wrapper {{ $message->read ? 'message_read' : 'message_unread' }}" data-id="{{ $message->id }}">
+                <button class="minimize_button"><<</button>
+                <div class="message_preview_wrapper">
+                    @foreach ($data['messages'] as $message)
+                    <div class="message_preview {{ $message->read ? 'message_read' : 'message_unread' }}" data-id="{{ $message->id }}">
                         <div class="from"><b>From: </b>{{ $message->name }}</div>
                         <div class="email"><b>Email: </b> {{$message->email}}</div>
                         <div class="phone"><b>Phone: </b> {{$message->phone}}</div>
-                        <div class="message">{{ \Illuminate\Support\Str::limit($message->body, 30) }}</div>
+                        <div class="message"><b>Message: </b>{{ \Illuminate\Support\Str::limit($message->body, 30) }}</div>
                     </div>
-                @endforeach
+                    @endforeach
+                </div>
             </div>
             <div class="message_viewer"></div>
                 <script>
-                    const messages = document.querySelectorAll('.message_preview_wrapper');
+                    const messages = document.querySelectorAll('.message_preview');
                     const message_viewer = document.querySelector('.message_viewer')
 
-                    const container = document.querySelector('.message_previews');
+                    const container = document.querySelector('.message_preview_wrapper');
 
                     messages.forEach(message => {
                         message.addEventListener('click', async () => {
@@ -210,8 +213,6 @@
                                     message.classList.remove('message_unread');
                                     message.classList.add('message_read');
 
-                                    // move message to the bottom (or after last read message)
-                                    container.appendChild(message);
                                 } else {
                                     console.error('Failed to mark message as read');
                                 }
@@ -220,6 +221,60 @@
                             }
                         });
                     });
+                    function clampMessageText(container = document) {
+                        container.querySelectorAll(".message .body").forEach(el => {
+                            let text = el.dataset.fulltext || el.textContent.trim();
+
+                            // Store the original text once so we don’t keep shortening it
+                            el.dataset.fulltext = text;
+
+                            if (text.length > 30) {
+                                el.textContent = text.substring(0, 30) + "…";
+                            } else {
+                                el.textContent = text;
+                            }
+                        });
+                    }
+
+                    // Run once on page load for all existing messages
+                    clampMessageText();
+                    async function pollMessages() {
+                        try {
+                            const response = await fetch('/messages/load_messages'); // maybe pass ?after=lastId
+                            const messages = await response.json();
+
+                            messages.forEach(msg => {
+                            // Skip if already exists
+                            if (document.querySelector(`[data-id="${msg.id}"]`)) return;
+
+                            // Create element
+                            const div = document.createElement("div");
+                            div.classList.add("message_preview","message_unread");
+                            div.dataset.id = msg.id;
+                            const shortBody = msg.body.length > 30 
+                                    ? msg.body.substring(0, 30) + "…" 
+                                    : msg.body;
+
+                            div.innerHTML = `
+                                <div class="from"><b>From: </b>${msg.name}</div>
+                                <div class="email"><b>Email: </b>${msg.email}</div>
+                                <div class="phone"><b>Phone: </b>${msg.phone}</div>
+                                <div class="message"><b>Message: </b>${shortBody}</div>
+                            `;
+
+                            // Prepend
+                            document.querySelector(".message_preview_wrapper").prepend(div);
+
+                            });
+
+                        } catch (err) {
+                            console.error("Polling error:", err);
+                        }
+                        }
+
+                        // Poll every 5 seconds
+                        setInterval(pollMessages, 5000);
+
             </script>
         </section>
         
