@@ -174,7 +174,6 @@
         <section id="messages" class="page hidden">
             <button class="close_section_button"><-- back to menu</button>
             <div class="message_previews">
-                <button class="minimize_button"><<</button>
                 <div class="message_preview_wrapper">
                     @foreach ($data['messages'] as $message)
                     <div class="message_preview {{ $message->read ? 'message_read' : 'message_unread' }}" data-id="{{ $message->id }}">
@@ -187,18 +186,21 @@
                 </div>
             </div>
             <div class="message_viewer"></div>
+            <div class="mobile_message_viewer"></div>
             <script>
-                const message_viewer = document.querySelector('.message_viewer');
                 const container = document.querySelector('.message_preview_wrapper');
+                const mobileViewer = document.querySelector('.mobile_message_viewer');
+                const desktopViewer = document.querySelector('.message_viewer');
 
                 container.addEventListener('click', async e => {
                     const message = e.target.closest('.message_preview');
                     if (!message) return;
 
                     const messageId = message.dataset.id;
+                    const isMobile = window.innerWidth <= 800;
+                    const viewer = isMobile ? mobileViewer : desktopViewer;
 
                     try {
-                        // Mark message as read
                         const res = await fetch('/messages/mark_message_as_read', {
                             method: 'POST',
                             headers: {
@@ -214,29 +216,30 @@
                             message.classList.add('message_read');
                         }
 
-                        // Fetch full message via ?id=
                         const fullRes = await fetch(`/messages/load_messages?id=${messageId}`);
                         const fullData = await fullRes.json();
 
-                        if (fullData.error) {
-                            message_viewer.innerHTML = `<p>Error: ${fullData.error}</p>`;
-                            return;
-                        }
-
-                        message_viewer.innerHTML = `
+                        viewer.innerHTML = `
+                            ${isMobile ? `<button class="close_button">Close</button>` : ''}
                             <div class="message_wrapper">
-                                <div class="message_name">From: ${fullData.name}</div>
-                                <p><b>Email:</b> ${fullData.email}</p>
-                                <p><b>Phone:</b> ${fullData.phone}</p>
-                                <div class="body">${fullData.body}</div>
+                                <div class="name"><b>From:</b>&nbsp;${fullData.name}</div>
+                                <div class="email"><b>Email:</b>&nbsp;${fullData.email}</div>
+                                <div class="phone"><b>Phone:</b>&nbsp;${fullData.phone}</div>
+                                <div class="body">&nbsp;${fullData.body}</div>
                             </div>
                         `;
+
+                        if (isMobile) {
+                            viewer.classList.add('active');
+                            viewer.querySelector('.close_button').addEventListener('click', () => {
+                                viewer.classList.remove('active');
+                            });
+                        }
                     } catch (err) {
                         console.error('Error:', err);
                     }
                 });
 
-                // Polling for new messages (no id param = all)
                 async function pollMessages() {
                     try {
                         const response = await fetch('/messages/load_messages');
@@ -249,15 +252,13 @@
                             div.classList.add("message_preview", msg.read ? "message_read" : "message_unread");
                             div.dataset.id = msg.id;
 
-                            const shortBody = msg.body.length > 30
-                                ? msg.body.substring(0, 30) + "…"
-                                : msg.body;
+                            const shortBody = msg.body.length > 30 ? msg.body.substring(0, 30) + "…" : msg.body;
 
                             div.innerHTML = `
                                 <div class="from"><b>From: </b>${msg.name}</div>
-                                <div class="email"><b>Email: </b>${msg.email}</div>
-                                <div class="phone"><b>Phone: </b>${msg.phone}</div>
-                                <div class="message"><b>Message: </b>${shortBody}</div>
+                                <div class="email"><b>Email:</b>&nbsp;${msg.email}</div>
+                                <div class="phone"><b>Phone:</b>&nbsp;${msg.phone}</div>
+                                <div class="message"><b>Message:</b>&nbsp;${shortBody}</div>
                             `;
 
                             container.prepend(div);
@@ -268,7 +269,6 @@
                 }
 
                 setInterval(pollMessages, 5000);
-
             </script>
         </section>
         
