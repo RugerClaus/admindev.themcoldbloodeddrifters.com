@@ -405,6 +405,13 @@
         text-align: left;
     }
 
+    .close_section_button {
+        right: 1rem;
+        top: 10px;
+        left: auto;
+        bottom: auto;
+    }
+
     .message_previews {
         width: 100vw;
     }
