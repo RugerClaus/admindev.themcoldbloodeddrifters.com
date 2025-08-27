@@ -25,12 +25,8 @@ class BandMembersController extends Controller
             'bio' => $request->bio_text,
         ];
 
-        if ($request->hasFile('bio_portrait')) {
-    
-            $portrait_path = $request->file('bio_portrait')
-                ->store('band_members', 'media');
-
-            
+        if ($request->hasFile('bio_portrait') && $request->file('bio_portrait')->isValid()) {
+            $portrait_path = $request->file('bio_portrait')->store('band_members', 'media');
             $updateData['portrait'] = Storage::disk('media')->url($portrait_path);
         }
         $member->update($updateData);
