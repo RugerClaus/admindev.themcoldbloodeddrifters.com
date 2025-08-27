@@ -61,7 +61,7 @@ return [
         ],
         'media' => [
             'driver' => 'local',
-            'root' => '/var/www/vhosts/unknownanarchist.blog/media.themcoldbloodeddrifters.com/sitemedia',
+            'root' => '/var/www/vhosts/unknownanarchist.blog/media.themcoldbloodeddrifters.com',
             'url' => env('APP_MEDIA_URL', 'https://media.themcoldbloodeddrifters.com'),
             'visibility' => 'public',
         ],
