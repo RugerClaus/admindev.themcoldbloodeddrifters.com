@@ -209,41 +209,48 @@
                     </script>
                 @endif
             @endauth
-            <script>
-                document.addEventListener("DOMContentLoaded", () => {
-                    const form = document.querySelector(".member_bio_editor");
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+            const form = document.querySelector(".member_bio_editor");
+            const portraitImg = document.getElementById("bio_portrait");
 
-                    if (!form) return;
+            if (!form) return;
 
-                    form.addEventListener("submit", async (e) => {
-                        e.preventDefault();
+            form.addEventListener("submit", async (e) => {
+                e.preventDefault();
 
-                        const formData = new FormData(form);
+                const formData = new FormData(form);
 
-                        try {
-                            const res = await fetch("/band_members/bio/update", {
-                                method: "POST",
-                                headers: {
-                                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
-                                },
-                                body: formData
-                            });
-
-                            const data = await res.json();
-
-                            if (data.success) {
-                                alert("Bio updated successfully!"); // optional: replace with nicer UI feedback
-                            } else {
-                                alert("Update failed: " + (data.message || "Unknown error"));
-                            }
-
-                        } catch (err) {
-                            console.error("Error updating bio:", err);
-                            alert("An error occurred while updating.");
-                        }
+                try {
+                    const res = await fetch("/band_members/bio/update", {
+                        method: "POST",
+                        headers: {
+                            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
+                        },
+                        body: formData
                     });
-                });
-                </script>
+
+                    const data = await res.json();
+
+                    if (data.success) {
+                        alert("Bio updated successfully!");
+
+                        if (data.updated_fields.portrait) {
+                            portraitImg.src = data.updated_fields.portrait;
+                        }
+
+                    } else {
+                        alert("Update failed: " + (data.message || "Unknown error"));
+                    }
+
+                } catch (err) {
+                    console.error("Error updating bio:", err);
+                    alert("An error occurred while updating.");
+                }
+            });
+        });
+
+        </script>
         </section>
         <section id="messages" class="page hidden">
             <button class="close_section_button"><-- back to menu</button>
