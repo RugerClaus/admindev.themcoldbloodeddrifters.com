@@ -37,4 +37,24 @@ class BandMembersController extends Controller
             'updated_fields' => $updateData,
         ]);
     }
+    public function delete_portrait()
+    {
+        $member = BandMembers::where('user_id', auth()->id())->firstOrFail();
+
+        if ($member->portrait) {
+            $path = str_replace(Storage::disk('media')->url(''), '', $member->portrait);
+            if (Storage::disk('media')->exists($path)) {
+                Storage::disk('media')->delete($path);
+            }
+
+            $member->portrait = 'https://placehold.co/300x700';
+            $member->save();
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Portrait deleted successfully.',
+        ]);
+    }
+
 }

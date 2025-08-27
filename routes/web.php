@@ -41,6 +41,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/users/user_change_password', [UsersController::class, 'user_change_password']);
 
     Route::post('/band_members/bio/update', [BandMembersController::class, 'update']);
+    Route::post('/band_members/delete_portrait', [BandMembersController::class, 'delete_portrait']);
 
     Route::post('/messages/mark_message_as_read', [MessageController::class, 'mark_message_as_read']);
 

@@ -170,13 +170,40 @@
             @auth
                 @if($data['user']->permission_level == 'user')
                     <form enctype="multipart/form-data" method="POST" class="member_bio_editor">
-                        <img src="{{$data['bio']->portrait}}" alt="bio image">
+                        <img src="{{$data['bio']->portrait}}" alt="bio image" id="bio_portrait">
+                        <button type="button" id="delete_img">Delete Image</button>
                         <input type="file" name="bio_portrait" id="bio_image" value="{{$data['bio']->portrait}}">
                         <input type="text" name="bio_name" id="bio_name" value="{{$data['bio']->name}}">
                         <input type="text" name="bio_instrument" value="{{$data['bio']->instrument}}">
                         <textarea type="text" name="bio_text">{{$data['bio']->bio}}</textarea>
                         <button type="submit">Update Bio</button>
                     </form>
+                    <script>
+                        document.getElementById('delete_img').addEventListener('click', function() {
+
+                            fetch('/band_members/delete_portrait', {
+                                method: 'POST',
+                                headers: {
+                                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                                    'Accept': 'application/json'
+                                }
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    // Update the image on the page to a placeholder
+                                    document.getElementById('bio_portrait').src = 'https://placehold.co/300x700';
+                                    alert(data.message);
+                                } else {
+                                    alert('Something went wrong.');
+                                }
+                            })
+                            .catch(err => {
+                                console.error(err);
+                                alert('Failed to delete portrait.');
+                            });
+                        });
+                    </script>
                 @endif
             @endauth
             <script>
