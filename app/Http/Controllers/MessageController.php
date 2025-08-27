@@ -8,10 +8,22 @@ use App\Models\ContactMessages;
 
 class MessageController extends Controller
 {
-    public function load_messages()
+    public function load_messages(Request $request)
     {
-        $messages = ContactMessages::orderBy('created_at','desc')->get();
+        $id = $request->query('id'); // e.g. /messages/load_messages?id=123
 
+        if ($id) {
+            $message = ContactMessages::find($id);
+
+            if (!$message) {
+                return response()->json(['error' => 'Message not found'], 404);
+            }
+
+            return response()->json($message);
+        }
+
+        // otherwise return all
+        $messages = ContactMessages::orderBy('created_at','desc')->get();
         return response()->json($messages);
     }
 

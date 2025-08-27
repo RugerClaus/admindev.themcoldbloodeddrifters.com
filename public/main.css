@@ -200,8 +200,8 @@
     height: 90vh;
     bottom: 0;
     top: auto;
-    background-color: blue;
-    display: none;
+    background-color: white;
+    display: block;
 }
 
 

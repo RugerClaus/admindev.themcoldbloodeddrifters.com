@@ -187,73 +187,71 @@
                 </div>
             </div>
             <div class="message_viewer"></div>
-                <script>
-                    const messages = document.querySelectorAll('.message_preview');
-                    const message_viewer = document.querySelector('.message_viewer')
+            <script>
+                const message_viewer = document.querySelector('.message_viewer');
+                const container = document.querySelector('.message_preview_wrapper');
 
-                    const container = document.querySelector('.message_preview_wrapper');
+                container.addEventListener('click', async e => {
+                    const message = e.target.closest('.message_preview');
+                    if (!message) return;
 
-                    messages.forEach(message => {
-                        message.addEventListener('click', async () => {
-                            const messageId = message.dataset.id;
+                    const messageId = message.dataset.id;
 
-                            try {
-                                const res = await fetch('/messages/mark_message_as_read', {
-                                    method: 'POST',
-                                    headers: {
-                                        'Content-Type': 'application/json',
-                                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                                    },
-                                    body: JSON.stringify({ id: messageId })
-                                });
-
-                                const data = await res.json();
-
-                                if (data.success) {
-                                    message.classList.remove('message_unread');
-                                    message.classList.add('message_read');
-
-                                } else {
-                                    console.error('Failed to mark message as read');
-                                }
-                            } catch (err) {
-                                console.error('Error:', err);
-                            }
+                    try {
+                        // Mark message as read
+                        const res = await fetch('/messages/mark_message_as_read', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                            },
+                            body: JSON.stringify({ id: messageId })
                         });
-                    });
-                    function clampMessageText(container = document) {
-                        container.querySelectorAll(".message .body").forEach(el => {
-                            let text = el.dataset.fulltext || el.textContent.trim();
 
-                            // Store the original text once so we don’t keep shortening it
-                            el.dataset.fulltext = text;
+                        const data = await res.json();
+                        if (data.success) {
+                            message.classList.remove('message_unread');
+                            message.classList.add('message_read');
+                        }
 
-                            if (text.length > 30) {
-                                el.textContent = text.substring(0, 30) + "…";
-                            } else {
-                                el.textContent = text;
-                            }
-                        });
+                        // Fetch full message via ?id=
+                        const fullRes = await fetch(`/messages/load_messages?id=${messageId}`);
+                        const fullData = await fullRes.json();
+
+                        if (fullData.error) {
+                            message_viewer.innerHTML = `<p>Error: ${fullData.error}</p>`;
+                            return;
+                        }
+
+                        message_viewer.innerHTML = `
+                            <div class="message_wrapper">
+                                <div class="message_name">From: ${fullData.name}</div>
+                                <p><b>Email:</b> ${fullData.email}</p>
+                                <p><b>Phone:</b> ${fullData.phone}</p>
+                                <div class="body">${fullData.body}</div>
+                            </div>
+                        `;
+                    } catch (err) {
+                        console.error('Error:', err);
                     }
+                });
 
-                    // Run once on page load for all existing messages
-                    clampMessageText();
-                    async function pollMessages() {
-                        try {
-                            const response = await fetch('/messages/load_messages'); // maybe pass ?after=lastId
-                            const messages = await response.json();
+                // Polling for new messages (no id param = all)
+                async function pollMessages() {
+                    try {
+                        const response = await fetch('/messages/load_messages');
+                        const messages = await response.json();
 
-                            messages.forEach(msg => {
-                            // Skip if already exists
+                        messages.forEach(msg => {
                             if (document.querySelector(`[data-id="${msg.id}"]`)) return;
 
-                            // Create element
                             const div = document.createElement("div");
-                            div.classList.add("message_preview","message_unread");
+                            div.classList.add("message_preview", msg.read ? "message_read" : "message_unread");
                             div.dataset.id = msg.id;
-                            const shortBody = msg.body.length > 30 
-                                    ? msg.body.substring(0, 30) + "…" 
-                                    : msg.body;
+
+                            const shortBody = msg.body.length > 30
+                                ? msg.body.substring(0, 30) + "…"
+                                : msg.body;
 
                             div.innerHTML = `
                                 <div class="from"><b>From: </b>${msg.name}</div>
@@ -262,18 +260,14 @@
                                 <div class="message"><b>Message: </b>${shortBody}</div>
                             `;
 
-                            // Prepend
-                            document.querySelector(".message_preview_wrapper").prepend(div);
+                            container.prepend(div);
+                        });
+                    } catch (err) {
+                        console.error("Polling error:", err);
+                    }
+                }
 
-                            });
-
-                        } catch (err) {
-                            console.error("Polling error:", err);
-                        }
-                        }
-
-                        // Poll every 5 seconds
-                        setInterval(pollMessages, 5000);
+                setInterval(pollMessages, 5000);
 
             </script>
         </section>
