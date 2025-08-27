@@ -172,6 +172,7 @@
                     <form enctype="multipart/form-data" method="POST" class="member_bio_editor">
                         <img src="{{$data['bio']->portrait}}" alt="bio image" id="bio_portrait">
                         <button type="button" id="delete_img">Delete Image</button>
+                        <div id="image_deletion_status"></div>
                         <input type="file" name="bio_portrait" id="bio_image" value="{{$data['bio']->portrait}}">
                         <input type="text" name="bio_name" id="bio_name" value="{{$data['bio']->name}}">
                         <input type="text" name="bio_instrument" value="{{$data['bio']->instrument}}">
@@ -193,7 +194,9 @@
                                 if (data.success) {
                                     // Update the image on the page to a placeholder
                                     document.getElementById('bio_portrait').src = 'https://placehold.co/300x700';
-                                    alert(data.message);
+                                    setTimeout(() => {
+                                        document.getElementById('image_deletion_status').innerHTML = `${data.message}`;
+                                    }, 2000);
                                 } else {
                                     alert('Something went wrong.');
                                 }
