@@ -32,8 +32,6 @@ class BandMembersController extends Controller
 
             
             $updateData['portrait'] = Storage::disk('media')->url($portrait_path);
-        } else {
-            return;
         }
         $member->update($updateData);
 
