@@ -33,7 +33,7 @@ class BandMembersController extends Controller
             
             $updateData['portrait'] = Storage::disk('media')->url($portrait_path);
         } else {
-            $updateData['portrait'] = 'https://placehold.co/600x800';
+            return;
         }
         $member->update($updateData);
 
