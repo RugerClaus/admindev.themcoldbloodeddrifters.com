@@ -41,4 +41,10 @@ class MessageController extends Controller
 
         return response()->json(['success' => true]);
     }
+
+    public function get_unread_count()
+    {
+        $count = ContactMessages::where('read', false)->count();
+        return response()->json(['unread_count' => $count]);
+    }
 }

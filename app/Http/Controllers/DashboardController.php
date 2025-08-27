@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\ContactMessages;
+use App\Models\BandMembers;
 
 class DashboardController extends Controller
 {
@@ -15,12 +16,17 @@ class DashboardController extends Controller
         $user = Auth::user();
         $users = User::all();
         $messages = ContactMessages::orderBy('id','desc')->get();
+        $unread_count = ContactMessages::where('read', false)->count();
+        $bio = BandMembers::where('user_id',$user->id)->first();
+
         
 
         $data = [
             'user' => $user,
             'users' => $users,
-            'messages' => $messages
+            'messages' => $messages,
+            'bio' => $bio,
+            'unread_count' => $unread_count
         ];
 
         return view('dashboard', ['data' => $data]);

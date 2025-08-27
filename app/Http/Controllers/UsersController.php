@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\BandMembers;
 
 class UsersController extends Controller
 {
@@ -16,6 +17,12 @@ class UsersController extends Controller
         ]);
 
         $user = User::findOrFail($request->id);
+        
+        $band_profile = BandMembers::where('user_id', $user->id)->first();
+        if ($band_profile) {
+            $band_profile->delete();
+        }
+
         $user->delete();
 
         return response()->json([
@@ -69,13 +76,26 @@ class UsersController extends Controller
         $user->username = $request->username;
         $user->password = Hash::make($request->password);
         $user->must_change_password = true;
+        $user->permission_level = 'user';
         $user->save();
+
+        if ($user->permission_level !== 'admin') {
+            BandMembers::create([
+                'user_id' => $user->id,
+                'name' => $user->username,
+                'instrument' => "Default instrument filler",
+                'bio' => "Default bio",
+                'portrait' => 'https://placehold.co/300x700',
+            ]);
+        }
+
         return response()->json([
             'success' => true,
             'message' => 'User added successfully',
             'user' => $user->makeVisible('password')->toArray(),
         ]);
     }
+
 
     public function user_change_password(Request $request)
     {

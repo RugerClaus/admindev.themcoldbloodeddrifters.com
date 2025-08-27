@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\BandMembersController;
 
 
 Route::get('/', function () {
@@ -29,6 +30,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/users/change_password', [DashboardController::class, 'change_password'])->name('must.change.password');
     Route::get('/messages/load_messages', [MessageController::class, 'load_messages']);
 
+    Route::get('/messages/unread_count', [MessageController::class, 'get_unread_count']);
+
 
     Route::post('/users/add', [UsersController::class, 'add']);
     Route::post('/users/update', [UsersController::class, 'update']);
@@ -36,6 +39,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/users/get_user_info', [UsersController::class, 'read']);
     Route::post('/users/must_change_password', [UsersController::class, 'must_change_password']);
     Route::post('/users/user_change_password', [UsersController::class, 'user_change_password']);
+
+    Route::post('/band_members/bio/update', [BandMembersController::class, 'update']);
 
     Route::post('/messages/mark_message_as_read', [MessageController::class, 'mark_message_as_read']);
 

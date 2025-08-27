@@ -107,7 +107,8 @@
 .menu .nav_row {
     display: flex;
     width: 50%;
-    justify-content: space-evenly;
+    gap: 2rem;
+    justify-content: center;
 }
 
 .menu .nav_row .card {
@@ -144,7 +145,21 @@
 }
 
 
-/* Site Messages Viewer*/
+.member_bio_editor{
+    height: 100vh;
+    width: 100%;
+    position: fixed;
+    overflow-y: scroll;
+    top: auto;
+    left: auto;
+    right: auto;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+}
 
 /* Site Messages Viewer */
 

@@ -128,30 +128,28 @@
                 </div>
             </div>
             <div class="nav_row">
+                @if($data['user']->permission_level == 'user')
                 <div class="card" data-target="bio_editor">
                     <div class="inner_card">
-                        <div>Member</div>
                         <div>Bio</div>
                         <div>Editor</div>
                     </div>
                 </div>
+                @endif
+                @if(auth()->user()->isAdmin())
+                    <div class="card" data-target="user_editor">
+                        <div class="inner_card">
+                            <div>User</div>
+                            <div>Manager</div>
+                        </div>
+                    </div>
+                @endif
                 <div class="card" data-target="messages">
                     <div class="inner_card">
                         <div>Messages</div>
+                        <div id="unread_count">({{$data['unread_count']}})</div>
                     </div>
                 </div>
-            </div>
-            <div class="nav_row">
-                @auth
-                    @if(auth()->user()->isAdmin())
-                        <div class="card" data-target="user_editor">
-                            <div class="inner_card">
-                                <div>User</div>
-                                <div>Manager</div>
-                            </div>
-                        </div>
-                    @endif
-                @endauth
             </div>
         </nav>
         <section id="home_editor" class="page hidden" >
@@ -169,7 +167,53 @@
         </section>
         <section id="bio_editor" class="page hidden">
             <button class="close_section_button"><-- back to menu</button>
-            test bio
+            @auth
+                @if($data['user']->permission_level == 'user')
+                    <form enctype="multipart/form-data" method="POST" class="member_bio_editor">
+                        <img src="{{$data['bio']->portrait}}" alt="bio image">
+                        <input type="file" name="bio_portrait" id="bio_image" value="{{$data['bio']->portrait}}">
+                        <input type="text" name="bio_name" id="bio_name" value="{{$data['bio']->name}}">
+                        <input type="text" name="bio_instrument" value="{{$data['bio']->instrument}}">
+                        <textarea type="text" name="bio_text">{{$data['bio']->bio}}</textarea>
+                        <button type="submit">Update Bio</button>
+                    </form>
+                @endif
+            @endauth
+            <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                    const form = document.querySelector(".member_bio_editor");
+
+                    if (!form) return;
+
+                    form.addEventListener("submit", async (e) => {
+                        e.preventDefault();
+
+                        const formData = new FormData(form);
+
+                        try {
+                            const res = await fetch("/band_members/bio/update", {
+                                method: "POST",
+                                headers: {
+                                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
+                                },
+                                body: formData
+                            });
+
+                            const data = await res.json();
+
+                            if (data.success) {
+                                alert("Bio updated successfully!"); // optional: replace with nicer UI feedback
+                            } else {
+                                alert("Update failed: " + (data.message || "Unknown error"));
+                            }
+
+                        } catch (err) {
+                            console.error("Error updating bio:", err);
+                            alert("An error occurred while updating.");
+                        }
+                    });
+                });
+                </script>
         </section>
         <section id="messages" class="page hidden">
             <button class="close_section_button"><-- back to menu</button>
@@ -188,6 +232,16 @@
             <div class="message_viewer"></div>
             <div class="mobile_message_viewer"></div>
             <script>
+                async function fetchUnreadCount() {
+                    try {
+                        const res = await fetch('/messages/unread_count');
+                        const data = await res.json();
+                        document.getElementById('unread_count').textContent = `(${data.unread_count})`;
+                    } catch (err) {
+                        console.error(err);
+                    }
+                }
+                setInterval(fetchUnreadCount, 3000);
                 const container = document.querySelector('.message_preview_wrapper');
                 const mobileViewer = document.querySelector('.mobile_message_viewer');
                 const desktopViewer = document.querySelector('.message_viewer');
