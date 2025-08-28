@@ -146,10 +146,9 @@
 
 
 .member_bio_editor{
-    height: 100vh;
+    min-height: 100vh;
     width: 100%;
     position: fixed;
-    overflow-y: scroll;
     top: auto;
     left: auto;
     right: auto;
@@ -159,6 +158,7 @@
     justify-content: center;
     align-items: center;
     gap: 2rem;
+    padding-top: 3rem;
 }
 
 /* Site Messages Viewer */
