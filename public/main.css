@@ -163,7 +163,7 @@
 }
 .member_bio_editor img {
     object-fit: contain;
-    max-width: 10rem;
+    width: 10rem;
 }
 
 /* Site Messages Viewer */
