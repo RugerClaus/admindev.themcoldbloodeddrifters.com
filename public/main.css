@@ -593,7 +593,8 @@
     .img_delete_status {
         width: 100%;
         text-align: center;
-        bottom: 3rem;
+        bottom: 0;
+        background-color: rgba(128, 128, 128, 1);
         top: auto;
     }
 }
