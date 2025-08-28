@@ -172,7 +172,7 @@
                    <div class="bio_editor_wrapper">
                         <form enctype="multipart/form-data" method="POST" class="member_bio_editor">
                            <div class="member_bio_image">
-                                <img src="https://placehold.co/300x700" alt="bio image" id="bio_portrait">
+                                <img src="{{$data['bio']->portrait}}" alt="bio image" id="bio_portrait">
                                 <button type="button" id="delete_img">Delete Image</button>
                                 <div id="image_deletion_status"></div>
                            </div>
