@@ -192,10 +192,10 @@
                             .then(response => response.json())
                             .then(data => {
                                 if (data.success) {
-                                    // Update the image on the page to a placeholder
+                                    
                                     document.getElementById('bio_portrait').src = 'https://placehold.co/300x700';
                                     setTimeout(() => {
-                                        document.getElementById('image_deletion_status').innerHTML = `${data.message}`;
+                                        document.getElementById('image_deletion_status').textContent = `${data.message}`;
                                     }, 2000);
                                 } else {
                                     alert('Something went wrong.');
@@ -207,50 +207,52 @@
                             });
                         });
                     </script>
+                    <script>
+                        document.addEventListener("DOMContentLoaded", () => {
+                        const form = document.querySelector(".member_bio_editor");
+                        const portraitImg = document.getElementById("bio_portrait");
+
+                        if (!form) return;
+
+                        form.addEventListener("submit", async (e) => {
+                            e.preventDefault();
+
+                            const formData = new FormData(form);
+
+                            try {
+                                const res = await fetch("/band_members/bio/update", {
+                                    method: "POST",
+                                    headers: {
+                                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
+                                    },
+                                    body: formData
+                                });
+
+                                const data = await res.json();
+
+                                if (data.success) {
+                                    setTimeout(() => {
+                                        document.getElementById('image_deletion_status').textContent = `${data.message}`;
+                                    }, 2000);
+
+                                    if (data.updated_fields.portrait) {
+                                        portraitImg.src = data.updated_fields.portrait;
+                                    }
+
+                                } else {
+                                    alert("Update failed: " + (data.message || "Unknown error"));
+                                }
+
+                            } catch (err) {
+                                console.error("Error updating bio:", err);
+                                alert("An error occurred while updating.");
+                            }
+                        });
+                    });
+                    </script>
                 @endif
             @endauth
-        <script>
-            document.addEventListener("DOMContentLoaded", () => {
-            const form = document.querySelector(".member_bio_editor");
-            const portraitImg = document.getElementById("bio_portrait");
 
-            if (!form) return;
-
-            form.addEventListener("submit", async (e) => {
-                e.preventDefault();
-
-                const formData = new FormData(form);
-
-                try {
-                    const res = await fetch("/band_members/bio/update", {
-                        method: "POST",
-                        headers: {
-                            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
-                        },
-                        body: formData
-                    });
-
-                    const data = await res.json();
-
-                    if (data.success) {
-                        alert("Bio updated successfully!");
-
-                        if (data.updated_fields.portrait) {
-                            portraitImg.src = data.updated_fields.portrait;
-                        }
-
-                    } else {
-                        alert("Update failed: " + (data.message || "Unknown error"));
-                    }
-
-                } catch (err) {
-                    console.error("Error updating bio:", err);
-                    alert("An error occurred while updating.");
-                }
-            });
-        });
-
-        </script>
         </section>
         <section id="messages" class="page hidden">
             <button class="close_section_button"><-- back to menu</button>
