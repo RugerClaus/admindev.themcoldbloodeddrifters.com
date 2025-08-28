@@ -194,8 +194,9 @@
                                 if (data.success) {
                                     
                                     document.getElementById('bio_portrait').src = 'https://placehold.co/300x700';
+                                    document.getElementById('image_deletion_status').textContent = `${data.message}`;
                                     setTimeout(() => {
-                                        document.getElementById('image_deletion_status').textContent = `${data.message}`;
+                                        document.getElementById('image_deletion_status').textContent = ``;
                                     }, 2000);
                                 } else {
                                     alert('Something went wrong.');
@@ -231,8 +232,9 @@
                                 const data = await res.json();
 
                                 if (data.success) {
+                                    document.getElementById('image_deletion_status').textContent = `${data.message}`;
                                     setTimeout(() => {
-                                        document.getElementById('image_deletion_status').textContent = `${data.message}`;
+                                        document.getElementById('image_deletion_status').textContent = ``;
                                     }, 2000);
 
                                     if (data.updated_fields.portrait) {
