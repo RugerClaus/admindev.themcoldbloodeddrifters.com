@@ -95,13 +95,13 @@
 .img_delete_status {
     position: fixed;
     z-index: 12;
-    top: 2rem;
-    left: 45vh;
+    width: 30%;
+    top: 3rem;
     background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
+    display: block;
     justify-content: center;
     align-items: center;
-    padding: 5px;
+    padding: 1rem;
     color: white;
 }
 
@@ -395,6 +395,7 @@
 
 @media(max-width:800px)
 {
+    
     .change_password_modal {
         width: 90%;
         margin-left: auto;
@@ -587,5 +588,12 @@
 
     .bio_editor_wrapper .member_bio_editor .member_bio_text textarea {
         height: 8rem;                 
+    }
+
+    .img_delete_status {
+        width: 100%;
+        text-align: center;
+        bottom: 3rem;
+        top: auto;
     }
 }
