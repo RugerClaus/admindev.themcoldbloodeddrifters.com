@@ -167,6 +167,7 @@
         </section>
         <section id="bio_editor" class="page hidden">
             <button class="close_section_button"><-- back to menu</button>
+            <div id="image_deletion_status" class="img_delete_status"></div>
             @auth
                 @if($data['user']->permission_level == 'user')
                    <div class="bio_editor_wrapper">
@@ -174,7 +175,7 @@
                            <div class="member_bio_image">
                                 <img src="{{$data['bio']->portrait}}" alt="bio image" id="bio_portrait">
                                 <button type="button" id="delete_img">Delete Image</button>
-                                <div id="image_deletion_status"></div>
+                                
                            </div>
                             <div class="member_bio_text">
                                 <input type="file" name="bio_portrait" id="bio_image" value="{{$data['bio']->portrait}}">
