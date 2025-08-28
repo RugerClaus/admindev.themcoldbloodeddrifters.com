@@ -169,16 +169,22 @@
             <button class="close_section_button"><-- back to menu</button>
             @auth
                 @if($data['user']->permission_level == 'user')
-                    <form enctype="multipart/form-data" method="POST" class="member_bio_editor">
-                        <img src="{{$data['bio']->portrait}}" alt="bio image" id="bio_portrait">
-                        <button type="button" id="delete_img">Delete Image</button>
-                        <div id="image_deletion_status"></div>
-                        <input type="file" name="bio_portrait" id="bio_image" value="{{$data['bio']->portrait}}">
-                        <input type="text" name="bio_name" id="bio_name" value="{{$data['bio']->name}}">
-                        <input type="text" name="bio_instrument" value="{{$data['bio']->instrument}}">
-                        <textarea type="text" name="bio_text">{{$data['bio']->bio}}</textarea>
-                        <button type="submit">Update Bio</button>
-                    </form>
+                   <div class="bio_editor_wrapper">
+                        <form enctype="multipart/form-data" method="POST" class="member_bio_editor">
+                           <div class="member_bio_image">
+                                <img src="https://placehold.co/300x700" alt="bio image" id="bio_portrait">
+                                <button type="button" id="delete_img">Delete Image</button>
+                                <div id="image_deletion_status"></div>
+                           </div>
+                            <div class="member_bio_text">
+                                <input type="file" name="bio_portrait" id="bio_image" value="{{$data['bio']->portrait}}">
+                                <input type="text" name="bio_name" id="bio_name" value="{{$data['bio']->name}}">
+                                <input type="text" name="bio_instrument" value="{{$data['bio']->instrument}}">
+                                <textarea type="text" name="bio_text">{{$data['bio']->bio}}</textarea>
+                                <button type="submit">Update Bio</button>
+                            </div>
+                        </form>
+                    </div> 
                     <script>
                         document.getElementById('delete_img').addEventListener('click', function() {
 
