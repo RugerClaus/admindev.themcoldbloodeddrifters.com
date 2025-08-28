@@ -147,6 +147,7 @@
 
 .member_bio_editor{
     min-height: 100vh;
+    height: fit-content;
     width: 100%;
     position: fixed;
     top: auto;
@@ -159,6 +160,10 @@
     align-items: center;
     gap: 2rem;
     padding-top: 3rem;
+}
+.member_bio_editor img {
+    object-fit: contain;
+    max-width: 10rem;
 }
 
 /* Site Messages Viewer */
