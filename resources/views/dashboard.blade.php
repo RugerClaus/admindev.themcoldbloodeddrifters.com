@@ -162,112 +162,108 @@
         <section id="band_bio_editor" class="page hidden">
             <button class="close_section_button"><-- back to menu</button>
             <div id="band_image_status" class="img_delete_status hidden"></div>
-            @auth
-                @if($data['user']->permission_level == 'user')
-                    <div class="bio_editor_wrapper">
-                        <form enctype="multipart/form-data" method="POST" class="band_bio_editor">
-                            <div class="band_bio_image">
-                                <img src="{{$data['band']->image_url ?? 'https://placehold.co/1280x720?text=Band+Photo'}}" alt="band image" id="band_image">
-                                <button type="button" id="delete_band_image">Delete Image</button>
-                            </div>
-                            <div class="band_bio_text">
-                                <input type="file" name="bio_image" id="band_image_input">
+            <div class="bio_editor_wrapper">
+                <form enctype="multipart/form-data" method="POST" class="band_bio_editor">
+                    <div class="band_bio_image">
+                        <img src="{{$data['band']->image_url ?? 'https://placehold.co/1280x720?text=Band+Photo'}}" alt="band image" id="band_image">
+                        <button type="button" id="delete_band_image">Delete Image</button>
+                    </div>
+                    <div class="band_bio_text">
+                        <input type="file" name="bio_image" id="band_image_input">
 
-                                <input type="text" name="bio_name" id="band_name" 
-                                    value="{{$data['band']->name ?? ''}}" placeholder="Band Name">
+                        <input type="text" name="bio_name" id="band_name" 
+                            value="{{$data['band']->name ?? ''}}" placeholder="Band Name">
 
-                                <input type="text" name="bio_list_left_to_right" id="band_list" 
-                                    value="{{$data['band']->band_list_left_to_right ?? ''}}" placeholder="List (L→R)">
+                        <input type="text" name="bio_list_left_to_right" id="band_list" 
+                            value="{{$data['band']->band_list_left_to_right ?? ''}}" placeholder="List (L→R)">
 
-                                <textarea name="bio_text" id="band_bio_text" placeholder="Band bio...">{{$data['band']->bio ?? ''}}</textarea>
+                        <textarea name="bio_text" id="band_bio_text" placeholder="Band bio...">{{$data['band']->bio ?? ''}}</textarea>
 
-                                <input type="text" name="bio_imgalt" id="band_imgalt" 
-                                    value="{{$data['band']->image_alt ?? ''}}" placeholder="Alt text">
+                        <input type="text" name="bio_imgalt" id="band_imgalt" 
+                            value="{{$data['band']->image_alt ?? ''}}" placeholder="Alt text">
 
-                                <button type="submit">Update Band Bio</button>
-                            </div>
-                        </form>
-                    </div> 
+                        <button type="submit">Update Band Bio</button>
+                    </div>
+                </form>
+            </div> 
 
-                    <script>
-                        // Handle image deletion
-                        document.getElementById('delete_band_image').addEventListener('click', function() {
-                            fetch('/band/bio/delete_image', {
-                                method: 'DELETE',
+            <script>
+                // Handle image deletion
+                document.getElementById('delete_band_image').addEventListener('click', function() {
+                    fetch('/band/bio/delete_image', {
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                            'Accept': 'application/json'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            document.getElementById('band_image').src = 'https://placehold.co/600x400';
+                            document.getElementById('band_image_status').textContent = `${data.message}`;
+                            document.getElementById('band_image_status').classList.remove('hidden')
+                            setTimeout(() => {
+                                document.getElementById('band_image_status').textContent = ``;
+                                document.getElementById('band_image_status').classList.add('hidden')
+                            }, 2000);
+                        } else {
+                            alert('Something went wrong.');
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        alert('Failed to delete band image.');
+                    });
+                });
+            </script>
+
+            <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                    const form = document.querySelector(".band_bio_editor");
+                    const bandImg = document.getElementById("band_image");
+
+                    if (!form) return;
+
+                    form.addEventListener("submit", async (e) => {
+                        e.preventDefault();
+
+                        const formData = new FormData(form);
+
+                        try {
+                            const res = await fetch("/band/bio/update", {
+                                method: "POST",
                                 headers: {
-                                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                                    'Accept': 'application/json'
-                                }
-                            })
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.success) {
-                                    document.getElementById('band_image').src = 'https://placehold.co/600x400';
-                                    document.getElementById('band_image_status').textContent = `${data.message}`;
-                                    document.getElementById('band_image_status').classList.remove('hidden')
-                                    setTimeout(() => {
-                                        document.getElementById('band_image_status').textContent = ``;
-                                        document.getElementById('band_image_status').classList.add('hidden')
-                                    }, 2000);
-                                } else {
-                                    alert('Something went wrong.');
-                                }
-                            })
-                            .catch(err => {
-                                console.error(err);
-                                alert('Failed to delete band image.');
+                                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
+                                },
+                                body: formData
                             });
-                        });
-                    </script>
 
-                    <script>
-                        document.addEventListener("DOMContentLoaded", () => {
-                            const form = document.querySelector(".band_bio_editor");
-                            const bandImg = document.getElementById("band_image");
+                            const data = await res.json();
 
-                            if (!form) return;
+                            if (data.success) {
+                                document.getElementById('band_image_status').textContent = `${data.message}`;
+                                document.getElementById('band_image_status').classList.remove('hidden')
+                                setTimeout(() => {
+                                    document.getElementById('band_image_status').textContent = ``;
+                                    document.getElementById('band_image_status').classList.add('hidden')
+                                }, 2000);
 
-                            form.addEventListener("submit", async (e) => {
-                                e.preventDefault();
-
-                                const formData = new FormData(form);
-
-                                try {
-                                    const res = await fetch("/band/bio/update", {
-                                        method: "POST",
-                                        headers: {
-                                            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
-                                        },
-                                        body: formData
-                                    });
-
-                                    const data = await res.json();
-
-                                    if (data.success) {
-                                        document.getElementById('band_image_status').textContent = `${data.message}`;
-                                        document.getElementById('band_image_status').classList.remove('hidden')
-                                        setTimeout(() => {
-                                            document.getElementById('band_image_status').textContent = ``;
-                                            document.getElementById('band_image_status').classList.add('hidden')
-                                        }, 2000);
-
-                                        if (data.updated_fields.image_url) {
-                                            bandImg.src = data.updated_fields.image_url;
-                                        }
-
-                                    } else {
-                                        alert("Update failed: " + (data.message || "Unknown error"));
-                                    }
-
-                                } catch (err) {
-                                    console.error("Error updating band bio:", err);
-                                    alert("An error occurred while updating.");
+                                if (data.updated_fields.image_url) {
+                                    bandImg.src = data.updated_fields.image_url;
                                 }
-                            });
-                        });
-                    </script>
-                @endif
-            @endauth
+
+                            } else {
+                                alert("Update failed: " + (data.message || "Unknown error"));
+                            }
+
+                        } catch (err) {
+                            console.error("Error updating band bio:", err);
+                            alert("An error occurred while updating.");
+                        }
+                    });
+                });
+            </script>
         </section>
 
 
