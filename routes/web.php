@@ -7,6 +7,7 @@ use App\Http\Controllers\UsersController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\BandMembersController;
 use App\Http\Controllers\BandBioController;
+use \App\Http\Controllers\CarouselController;
 
 Route::get('/', function () {
     if (!auth()->check()) {
@@ -39,6 +40,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/users/get_user_info', [UsersController::class, 'read']);
     Route::post('/users/must_change_password', [UsersController::class, 'must_change_password']);
     Route::post('/users/user_change_password', [UsersController::class, 'user_change_password']);
+
+    Route::get('/carousel/list', [CarouselController::class, 'list']);
+    Route::get('/carousel/read/{id}', [CarouselController::class, 'read']);
+    Route::post('/carousel/create', [CarouselController::class, 'create']);
+    Route::post('/carousel/update', [CarouselController::class, 'update']);
+    Route::post('/carousel/delete', [CarouselController::class, 'delete']);
+
 
     Route::post('/band/bio/update', [BandBioController::class, 'update']);
     Route::post('/band/bio/delete_image', [BandBioController::class, 'delete_image']);

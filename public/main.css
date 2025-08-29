@@ -157,6 +157,71 @@
     display: none;
 }
 
+.carousel_grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 1rem;
+}
+
+.carousel_card {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid black;
+    background: white;
+}
+
+.carousel_card img {
+    width: 100%;
+    height: 170px;
+    object-fit: cover;
+    display: block;
+}
+
+.carousel_card .meta {
+    padding: .3rem .4rem;
+    font-size: .9rem;
+    display: flex;
+    justify-content: space-between;
+    gap: .3rem;
+}
+
+.carousel_card_overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,.35);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: .6rem;
+    opacity: 0;
+    transition: opacity .15s ease-in-out;
+}
+
+.carousel_card:hover .carousel_card_overlay,
+.carousel_card.touch_active .carousel_card_overlay { 
+    opacity: 1; 
+}
+
+.carousel_card_overlay button {
+    background: white;
+    border: 1px solid black;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0; /* hide text */
+}
+
+.carousel_card_overlay button .icon {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+}
+
 .bio_editor_wrapper .band_bio_editor {
     display: flex;
     gap: 1rem;
@@ -688,5 +753,11 @@
     .bio_editor_wrapper .band_bio_editor .band_bio_text textarea {
         height: 8rem;
     }
+
+    .carousel_grid {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        gap: .7rem;
+    }
+    .carousel_card img { height: 140px; }
 
 }

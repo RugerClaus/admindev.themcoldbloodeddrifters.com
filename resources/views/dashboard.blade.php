@@ -155,9 +155,33 @@
         <section id="home_editor" class="page hidden" >
             <button class="close_section_button"><-- back to menu</button>
             <section class="carousel" id="carousel_control">
-                <img id="loading" src="{{asset('assets/loading.gif')}}" alt="Loading..." style="display:none; width:50px; height:50px;">
-                <script src="{{asset('scripts/pages/home_editor.js')}}"></script>
+                <div id="carousel_status" class="img_delete_status hidden"></div>
+
+                <div class="carousel_toolbar" style="width:100%;display:flex;justify-content:flex-end;margin-bottom:1rem;">
+                    <button id="add_carousel_image" class="edit_user" type="button">+ Add Image</button>
+                </div>
+
+                <section id="carousel_grid" class="carousel_grid">
+                    
+                </section>
+                <div id="carousel_modal" class="change_password_modal hidden" style="left:auto;right:2rem;">
+                    <form id="carousel_form" enctype="multipart/form-data">
+                        @csrf
+                        <input type="hidden" name="id" id="carousel_id">
+                        <div style="display:flex;flex-direction:column;gap:.8rem;">
+                            <input type="file" name="image" id="carousel_image">
+                            <input type="text" name="alt" id="carousel_alt" placeholder="Alt text" required>
+                            <input type="text" name="caption" id="carousel_caption" placeholder="Caption (optional)">
+                            <input type="number" name="sort_order" id="carousel_sort" placeholder="Sort (1..N)" min="1" step="1">
+                            <div style="display:flex;gap:.5rem;justify-content:flex-end;">
+                                <button type="submit" class="save_user">Save</button>
+                                <button type="button" id="close_carousel_modal" class="edit_user">Cancel</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </section>
+            <script src="{{ asset('scripts/pages/home_editor.js') }}"></script>
         </section>
         <section id="band_bio_editor" class="page hidden">
             <button class="close_section_button"><-- back to menu</button>

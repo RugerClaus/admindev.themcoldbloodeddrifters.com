@@ -1,59 +1,165 @@
-const api_url = 'https://apidev.themcoldbloodeddrifters.com';
+(() => {
+  const grid = document.getElementById('carousel_grid');
+  const statusEl = document.getElementById('carousel_status');
 
-async function loadGallery() {
-    const container = document.getElementById('carousel_control');
-    const loading = document.getElementById('loading');
-    loading.style.display = 'block';
-    container.innerHTML = '';
+  const modal = document.getElementById('carousel_modal');
+  const form = document.getElementById('carousel_form');
+  const closeBtn = document.getElementById('close_carousel_modal');
+  const addBtn = document.getElementById('add_carousel_image');
+
+  const idField = document.getElementById('carousel_id');
+  const altField = document.getElementById('carousel_alt');
+  const capField = document.getElementById('carousel_caption');
+  const sortField = document.getElementById('carousel_sort');
+  const imgField = document.getElementById('carousel_image');
+
+  const csrf = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+  function flash(msg) {
+    statusEl.textContent = msg;
+    statusEl.classList.remove('hidden');
+    setTimeout(() => {
+      statusEl.textContent = '';
+      statusEl.classList.add('hidden');
+    }, 1800);
+  }
+
+  function openModal(data = null) {
+    form.reset();
+    idField.value = '';
+    if (data) {
+      idField.value = data.id;
+      altField.value = data.alt ?? '';
+      capField.value = data.caption ?? '';
+      sortField.value = data.sort_order ?? '';
+    }
+    modal.classList.remove('hidden');
+  }
+
+  function closeModal() {
+    modal.classList.add('hidden');
+  }
+
+  async function fetchList() {
+    const res = await fetch('/carousel/list', { headers: { 'Accept': 'application/json' }});
+    if (!res.ok) throw new Error('Failed to load carousel');
+    return await res.json(); // [{id,url,alt,caption,sort_order}]
+  }
+
+  function cardTemplate(item) {
+    return `
+      <div class="carousel_card" data-id="${item.id}">
+        <img src="${item.url}" alt="${item.alt ?? ''}">
+        <div class="meta">
+          <span title="${item.alt ?? ''}">${(item.alt ?? '').slice(0,18)}${(item.alt ?? '').length>18?'…':''}</span>
+          <span>#${item.sort_order ?? ''}</span>
+        </div>
+        <div class="carousel_card_overlay">
+          <button class="edit_btn" title="Edit">
+            <img class="icon" src="/assets/icons/pencil.svg" alt="Edit">
+          </button>
+          <button class="delete_btn" title="Delete">
+            <img class="icon" src="/assets/icons/trash.svg" alt="Delete">
+          </button>
+        </div>
+      </div>
+    `;
+  }
+
+  function bindCardEvents(card) {
+    card.addEventListener('touchstart', () => {
+      card.classList.toggle('touch_active');
+    });
+
+    const editBtn = card.querySelector('.edit_btn');
+    const delBtn  = card.querySelector('.delete_btn');
+
+    editBtn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      const id = card.dataset.id;
+      try {
+        const res = await fetch(`/carousel/read/${id}`, { headers: { 'Accept':'application/json' }});
+        const item = await res.json();
+        openModal(item);
+      } catch (err) {
+        console.error(err);
+        alert('Failed to load item.');
+      }
+    });
+
+    delBtn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      const id = card.dataset.id;
+      if (!confirm('Delete this image?')) return;
+      try {
+        const res = await fetch('/carousel/delete', {
+          method: 'POST',
+          headers: {
+            'X-CSRF-TOKEN': csrf,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ id })
+        });
+        const data = await res.json();
+        if (data.success) {
+          card.remove();
+          flash('Deleted.');
+        } else {
+          alert(data.message || 'Delete failed.');
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Error deleting image.');
+      }
+    });
+  }
+
+  function render(list) {
+    grid.innerHTML = list.map(cardTemplate).join('');
+    grid.querySelectorAll('.carousel_card').forEach(bindCardEvents);
+  }
+
+  addBtn?.addEventListener('click', () => openModal());
+  closeBtn?.addEventListener('click', closeModal);
+  modal?.addEventListener('click', (e) => {
+    if (e.target === modal) closeModal();
+  });
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const fd = new FormData(form);
+    const hasId = !!fd.get('id');
 
     try {
-        const response = await fetch(`${api_url}/carousel`);
-        if (!response.ok) throw new Error('Network response was not ok');
-        const data = await response.json();
+      const url = hasId ? '/carousel/update' : '/carousel/create';
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'X-CSRF-TOKEN': csrf },
+        body: fd
+      });
+      const data = await res.json();
+      if (!data.success) throw new Error(data.message || 'Save failed');
 
-        // Render data
-        data.forEach(item => {
-            const card = document.createElement('div');
-            card.classList.add('carousel_image');
+      closeModal();
+      flash(hasId ? 'Updated!' : 'Created!');
 
-            // Store data as dataset for easy retrieval
-            card.dataset.id = item.id;
-            card.dataset.src = item.src;
-            card.dataset.caption = item.caption;
-            card.dataset.blurb = item.blurb;
+      const list = await fetchList();
+      render(list);
 
-            card.innerHTML = `<img src="${item.src}" alt="${item.caption}" style="max-width:100%;">`;
-
-            // Add click listener here so it works immediately
-            card.addEventListener('click', () => openEditor(item));
-
-            container.appendChild(card);
-        });
-    } catch (error) {
-        container.innerHTML = `<p style="color:red;">Failed to load data: ${error.message}</p>`;
-    } finally {
-        loading.style.display = 'none';
+    } catch (err) {
+      console.error(err);
+      alert(err.message || 'Error saving.');
     }
-}
+  });
 
-function openEditor(item) {
-    const editor = document.createElement('section');
-    editor.classList.add('page');
-    editor.innerHTML = `
-        <button class="close_section_button">Close</button>
-        <img src="${item.src}" id="image_${item.id}" alt="${item.caption}" style="max-width:100%;">
-        <textarea>${item.caption}</textarea>
-        <textarea>${item.blurb}</textarea>
-        <button type="submit"></button>
-    `;
-
-    body.appendChild(editor);
-
-    // Close button
-    editor.querySelector('.close_editor').addEventListener('click', () => {
-        editor.remove();
-    });
-}
-
-loadGallery();
-setInterval(loadGallery, 10000);
+  (async () => {
+    try {
+      const list = await fetchList();
+      render(list);
+    } catch (err) {
+      console.error(err);
+      flash('Failed to load carousel.');
+    }
+  })();
+})();

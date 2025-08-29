@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\ContactMessages;
 use App\Models\BandMembers;
 use App\Models\Band;
+use App\Models\CarouselImages;
 
 class DashboardController extends Controller
 {
