@@ -6,7 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\BandMembersController;
-
+use App\Http\Controllers\BandBioController;
 
 Route::get('/', function () {
     if (!auth()->check()) {
@@ -39,6 +39,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/users/get_user_info', [UsersController::class, 'read']);
     Route::post('/users/must_change_password', [UsersController::class, 'must_change_password']);
     Route::post('/users/user_change_password', [UsersController::class, 'user_change_password']);
+
+    Route::post('/band/bio/update', [BandBioController::class, 'update']);
+    Route::post('/band/bio/delete_image', [BandBioController::class, 'delete_image']);
 
     Route::post('/band_members/bio/update', [BandMembersController::class, 'update']);
     Route::post('/band_members/delete_portrait', [BandMembersController::class, 'delete_portrait']);

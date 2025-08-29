@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\ContactMessages;
 use App\Models\BandMembers;
+use App\Models\Band;
 
 class DashboardController extends Controller
 {
@@ -18,6 +19,7 @@ class DashboardController extends Controller
         $messages = ContactMessages::orderBy('id','desc')->get();
         $unread_count = ContactMessages::where('read', false)->count();
         $bio = BandMembers::where('user_id',$user->id)->first();
+        $band = Band::firstOrFail();
 
         
 
@@ -26,6 +28,7 @@ class DashboardController extends Controller
             'users' => $users,
             'messages' => $messages,
             'bio' => $bio,
+            'band' => $band,
             'unread_count' => $unread_count
         ];
 

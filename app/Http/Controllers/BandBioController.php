@@ -3,61 +3,74 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 use App\Models\Band;
 
 class BandBioController extends Controller
 {
+
     public function update(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'band_list_left_to_right' => 'required|string|max:255',
-            'bio' => 'required|min:80',
-            'image' => 'nullable|image|max:2048',
-            'imgalt' => 'nullable|string|max:255'
-        ]);
+        try {
+            $request->validate([
+                'bio_name' => 'required|string|max:255',
+                'bio_list_left_to_right' => 'nullable|string|max:255',
+                'bio_text' => 'nullable|string|min:80',
+                'bio_image' => 'nullable|image|max:2048',
+                'bio_imgalt' => 'nullable|string|max:255',
+            ]);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->errors()
+            ], 422);
+        }
 
         $band = Band::firstOrFail();
 
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-
-            // Subfolder for this type of media
-            $subfolder = 'band/bio';
-
-            // Ensure directory exists
-            $fullPath = public_path($subfolder);
-            if (!file_exists($fullPath)) {
-                mkdir($fullPath, 0755, true);
-            }
-
-            // Filename can be consistent or include timestamp for uniqueness
-            $filename = 'band_photo.' . $image->getClientOriginalExtension();
-
-            // Move uploaded file to subfolder
-            $image->move($fullPath, $filename);
-
-            // Store relative URL to DB
-            $validated['image_url'] = $subfolder . '/' . $filename;
-        }
-
-        // Prepare data for update
         $updateData = [
-            'name' => $validated['name'],
-            'band_list_left_to_right' => $validated['band_list_left_to_right'],
-            'bio' => $validated['bio'],
+            'name' => $request->bio_name,
+            'band_list_left_to_right' => $request->bio_list_left_to_right,
+            'bio' => $request->bio_text,
         ];
 
-        if (isset($validated['image_url'])) {
-            $updateData['image_url'] = $validated['image_url'];
+        if ($request->hasFile('bio_image') && $request->file('bio_image')->isValid()) {
+            $image_path = $request->file('bio_image')->store('band/bio', 'media');
+            $updateData['image_url'] = Storage::disk('media')->url($image_path);
         }
 
-        if (!empty($validated['imgalt'])) {
-            $updateData['image_alt'] = $validated['imgalt'];
+        if (!empty($request->bio_imgalt)) {
+            $updateData['image_alt'] = $request->bio_imgalt;
         }
 
         $band->update($updateData);
 
-        return redirect()->route('band.edit')->with('success', 'Band bio updated!');
+        return response()->json([
+            'success' => true,
+            'message' => 'Band bio has been updated!',
+            'updated_fields' => $updateData,
+        ]);
+    }
+
+
+    public function delete_image()
+    {
+        $band = Band::firstOrFail();
+
+        if ($band->image_url) {
+            $path = str_replace(Storage::disk('media')->url(''), '', $band->image_url);
+            if (Storage::disk('media')->exists($path)) {
+                Storage::disk('media')->delete($path);
+            }
+
+            $band->image_url = 'https://placehold.co/600x400';
+            $band->save();
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Band image deleted successfully.',
+        ]);
     }
 }
