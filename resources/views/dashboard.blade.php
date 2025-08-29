@@ -157,10 +157,6 @@
             <section class="carousel" id="carousel_control">
                 <div id="carousel_status" class="img_delete_status hidden"></div>
 
-                <div class="carousel_toolbar" style="width:100%;display:flex;justify-content:flex-end;margin-bottom:1rem;">
-                    <button id="add_carousel_image" class="edit_user" type="button">+ Add Image</button>
-                </div>
-
                 <section id="carousel_grid" class="carousel_grid">
                     
                 </section>

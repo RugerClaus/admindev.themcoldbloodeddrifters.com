@@ -222,6 +222,27 @@
     object-fit: contain;
 }
 
+.carousel_card.add_card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border: 2px dashed #aaa;
+    background: #f9f9f9;
+    transition: background .2s ease-in-out;
+}
+
+.carousel_card.add_card:hover {
+    background: #efefef;
+}
+
+.add_card_content {
+    font-size: 2.5rem;
+    color: #555;
+    font-weight: bold;
+    line-height: 1;
+}
+
 .bio_editor_wrapper .band_bio_editor {
     display: flex;
     gap: 1rem;
