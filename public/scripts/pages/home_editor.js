@@ -8,9 +8,8 @@
   const addBtn = document.getElementById('add_carousel_image');
 
   const idField = document.getElementById('carousel_id');
-  const altField = document.getElementById('carousel_alt');
   const capField = document.getElementById('carousel_caption');
-  const sortField = document.getElementById('carousel_sort');
+  const blurbField = document.getElementById('carousel_sort'); // reuse sort field for blurb
   const imgField = document.getElementById('carousel_image');
 
   const csrf = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
@@ -29,9 +28,8 @@
     idField.value = '';
     if (data) {
       idField.value = data.id;
-      altField.value = data.alt ?? '';
       capField.value = data.caption ?? '';
-      sortField.value = data.sort_order ?? '';
+      blurbField.value = data.blurb ?? '';
     }
     modal.classList.remove('hidden');
   }
@@ -43,16 +41,16 @@
   async function fetchList() {
     const res = await fetch('/carousel/list', { headers: { 'Accept': 'application/json' }});
     if (!res.ok) throw new Error('Failed to load carousel');
-    return await res.json(); // [{id,url,alt,caption,sort_order}]
+    return await res.json(); // [{id,src,caption,blurb}]
   }
 
   function cardTemplate(item) {
     return `
       <div class="carousel_card" data-id="${item.id}">
-        <img src="${item.url}" alt="${item.alt ?? ''}">
+        <img src="${item.src}" alt="${item.caption ?? ''}">
         <div class="meta">
-          <span title="${item.alt ?? ''}">${(item.alt ?? '').slice(0,18)}${(item.alt ?? '').length>18?'…':''}</span>
-          <span>#${item.sort_order ?? ''}</span>
+          <span title="${item.caption ?? ''}">${(item.caption ?? '').slice(0,18)}${(item.caption ?? '').length>18?'…':''}</span>
+          <span>${item.blurb ?? ''}</span>
         </div>
         <div class="carousel_card_overlay">
           <button class="edit_btn" title="Edit">
