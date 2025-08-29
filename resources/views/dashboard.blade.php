@@ -167,7 +167,7 @@
                     <div class="bio_editor_wrapper">
                         <form enctype="multipart/form-data" method="POST" class="band_bio_editor">
                             <div class="band_bio_image">
-                                <img src="{{$data['band']->image_url ?? 'https://placehold.co/300x700'}}" alt="band image" id="band_image">
+                                <img src="{{$data['band']->image_url ?? 'https://placehold.co/1280x720?text=Band+Photo'}}" alt="band image" id="band_image">
                                 <button type="button" id="delete_band_image">Delete Image</button>
                             </div>
                             <div class="band_bio_text">
