@@ -54,10 +54,10 @@
         </div>
         <div class="carousel_card_overlay">
           <button class="edit_btn" title="Edit">
-            <img class="icon" src="/assets/icons/pencil.svg" alt="Edit">
+            <img class="icon" src="/assets/icons/pencil.png" alt="Edit">
           </button>
           <button class="delete_btn" title="Delete">
-            <img class="icon" src="/assets/icons/trash.svg" alt="Delete">
+            <img class="icon" src="/assets/icons/trash.png" alt="Delete">
           </button>
         </div>
       </div>
