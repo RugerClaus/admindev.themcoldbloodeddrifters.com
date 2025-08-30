@@ -11,4 +11,3 @@ class HomeData extends Model
         'right'
     ];
 }
-//fomo
