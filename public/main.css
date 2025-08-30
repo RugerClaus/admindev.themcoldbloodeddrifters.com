@@ -158,32 +158,24 @@
 }
 
 .carousel_grid {
+    padding: 3rem;
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     gap: 1rem;
 }
 
 .carousel_card {
     position: relative;
     overflow: hidden;
-    border: 1px solid black;
     background: white;
 }
 
 .carousel_card img {
     width: 100%;
-    height: 170px;
+    height: 150px;
     object-fit: cover;
     display: block;
-}
-
-.carousel_card .meta {
-    padding: .3rem .4rem;
-    font-size: .9rem;
-    display: flex;
-    justify-content: space-between;
-    gap: .3rem;
 }
 
 .carousel_card_overlay {
@@ -191,8 +183,8 @@
     inset: 0;
     background: rgba(0,0,0,.35);
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: space-between;
+    align-items: flex-start;
     gap: .6rem;
     opacity: 0;
     transition: opacity .15s ease-in-out;
@@ -204,16 +196,15 @@
 }
 
 .carousel_card_overlay button {
-    background: white;
-    border: 1px solid black;
+    background: rgba(0, 0, 0, 0.0);
+    border: none;
     width: 42px;
     height: 42px;
-    border-radius: 50%;
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 0; /* hide text */
+    font-size: 0;
 }
 
 .carousel_card_overlay button .icon {
@@ -241,6 +232,46 @@
     color: #555;
     font-weight: bold;
     line-height: 1;
+}
+
+.carousel_edit_modal {
+    position: absolute;
+    z-index: 10;
+    top: 5%;
+    left: 5%;
+    width: 90vw;
+    height: 90vh;
+    border: 1px solid black;
+    background-color: rgba(0, 0, 0, 0.5);
+    margin-left: auto;
+    margin-right: auto;
+    padding: 2rem;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.carousel_edit_modal form .text_fields {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+}
+
+.carousel_edit_modal form .text_fields input,
+.carousel_edit_modal form .text_fields textarea {
+    font-size: 1.3rem;
+    width: 80%;
+}
+.carousel_edit_modal form .text_fields textarea {
+    height: 5rem;
+}
+
+.carousel_edit_modal form .text_fields button {
+    background-color: white;
+    font-size: 1.3rem;
+    padding: 3px;
 }
 
 .bio_editor_wrapper .band_bio_editor {
@@ -776,9 +807,18 @@
     }
 
     .carousel_grid {
-        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-        gap: .7rem;
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+        padding: 0;
+        gap: 0;
     }
-    .carousel_card img { height: 140px; }
+    .carousel_grid .carousel_card {
+        border: 1px solid white;
+    }
+    .carousel_card img { height: 80px; }
 
+    .add_card{
+        height: 100px;
+    }
+
+    
 }

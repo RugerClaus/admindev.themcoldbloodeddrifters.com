@@ -160,15 +160,15 @@
                 <section id="carousel_grid" class="carousel_grid">
                     
                 </section>
-                <div id="carousel_modal" class="change_password_modal hidden" style="left:auto;right:2rem;">
+                <div id="carousel_modal" class="carousel_edit_modal">
                     <form id="carousel_form" enctype="multipart/form-data">
                         @csrf
                         <input type="hidden" name="id" id="carousel_id">
-                        <div style="display:flex;flex-direction:column;gap:.8rem;">
+                        <div class="text_fields">
                             <input type="file" name="image" id="carousel_image">
                             <input type="text" name="alt" id="carousel_alt" placeholder="Alt text" required>
                             <input type="text" name="caption" id="carousel_caption" placeholder="Caption (optional)">
-                            <input type="number" name="sort_order" id="carousel_sort" placeholder="Sort (1..N)" min="1" step="1">
+                            <textarea name="blurb" id="carousel_blurb" placeholder="Image info"></textarea>
                             <div style="display:flex;gap:.5rem;justify-content:flex-end;">
                                 <button type="submit" class="save_user">Save</button>
                                 <button type="button" id="close_carousel_modal" class="edit_user">Cancel</button>
@@ -285,8 +285,6 @@
                 });
             </script>
         </section>
-
-
         <section id="bio_editor" class="page hidden">
             <button class="close_section_button"><-- back to menu</button>
             <div id="image_deletion_status" class="img_delete_status hidden"></div>
@@ -498,7 +496,6 @@
                 setInterval(pollMessages, 5000);
             </script>
         </section>
-        
         <section id="user_editor" class="page hidden">
             <button class="close_section_button"><-- back to menu</button>
             <br>

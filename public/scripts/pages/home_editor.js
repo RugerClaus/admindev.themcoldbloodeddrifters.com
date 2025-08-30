@@ -9,8 +9,9 @@
 
   const idField = document.getElementById('carousel_id');
   const capField = document.getElementById('carousel_caption');
-  const blurbField = document.getElementById('carousel_sort'); 
+  const blurbField = document.getElementById('carousel_blurb'); 
   const imgField = document.getElementById('carousel_image');
+
 
   const csrf = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
@@ -31,11 +32,11 @@
       capField.value = data.caption ?? '';
       blurbField.value = data.blurb ?? '';
     }
-    modal.classList.remove('hidden');
+    modal.style.display = 'flex'
   }
 
   function closeModal() {
-    modal.classList.add('hidden');
+    modal.style.display = 'none';
   }
 
   async function fetchList() {
@@ -48,10 +49,6 @@
     return `
       <div class="carousel_card" data-id="${item.id}">
         <img src="${item.src}" alt="${item.caption ?? ''}">
-        <div class="meta">
-          <span title="${item.caption ?? ''}">${(item.caption ?? '').slice(0,18)}${(item.caption ?? '').length>18?'…':''}</span>
-          <span>${item.blurb ?? ''}</span>
-        </div>
         <div class="carousel_card_overlay">
           <button class="edit_btn" title="Edit">
             <img class="icon" src="/assets/icons/pencil.png" alt="Edit">
