@@ -168,4 +168,18 @@
       flash('Failed to load carousel.');
     }
   })();
+
+  async function refreshCarousel() {
+    try {
+      const list = await fetchList();
+      render(list);
+    } catch (err) {
+      console.error(err);
+      flash('Failed to refresh carousel.');
+    }
+  }
+
+  refreshCarousel();
+
+  setInterval(refreshCarousel, 5000);
 })();
