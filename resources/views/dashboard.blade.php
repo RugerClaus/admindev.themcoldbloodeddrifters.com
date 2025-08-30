@@ -166,7 +166,6 @@
                         <input type="hidden" name="id" id="carousel_id">
                         <div class="text_fields">
                             <input type="file" name="image" id="carousel_image">
-                            <input type="text" name="alt" id="carousel_alt" placeholder="Alt text" required>
                             <input type="text" name="caption" id="carousel_caption" placeholder="Caption (optional)">
                             <textarea name="blurb" id="carousel_blurb" placeholder="Image info"></textarea>
                             <div style="display:flex;gap:.5rem;justify-content:flex-end;">
