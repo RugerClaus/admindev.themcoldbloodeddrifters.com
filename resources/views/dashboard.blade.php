@@ -166,8 +166,8 @@
                         <input type="hidden" name="id" id="carousel_id">
                         <div class="text_fields">
                             <input type="file" name="image" id="carousel_image">
-                            <input type="text" name="caption" id="carousel_caption" placeholder="Caption (optional)">
-                            <textarea name="blurb" id="carousel_blurb" placeholder="Image info"></textarea>
+                            <input type="text" name="caption" id="carousel_caption" placeholder="Label" required>
+                            <textarea name="blurb" id="carousel_blurb" placeholder="Image info" required></textarea>
                             <div style="display:flex;gap:.5rem;justify-content:flex-end;">
                                 <button type="submit" class="save_user">Save</button>
                                 <button type="button" id="close_carousel_modal" class="edit_user">Cancel</button>
