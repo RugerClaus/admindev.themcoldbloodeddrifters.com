@@ -74,6 +74,7 @@
     font-size: 2rem;
     background-color: white;
     border-radius: none;
+    cursor: pointer;
 }
 
 .change_password_modal form button:hover {
@@ -103,6 +104,19 @@
     align-items: center;
     padding: 1rem;
     color: white;
+}
+
+.divider_line {
+    width: 90vw;
+    height: 3px;
+    background-color: lightgray;
+    border: 1px solid lightgray;
+    border-radius: 20%;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
 }
 
 .menu {
@@ -272,6 +286,42 @@
     background-color: white;
     font-size: 1.3rem;
     padding: 3px;
+    cursor: pointer;
+}
+
+.edit_home_text_wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    min-height: 50vh;
+}
+
+.edit_home_text_wrapper form {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    border: 1px solid black;
+    width: 30%;
+    padding: 3rem;
+}
+
+.edit_home_text_wrapper form label {
+    font-weight: bold;
+    text-align: center;
+}
+
+.edit_home_text_wrapper form textarea {
+    font-size: 1.3rem;
+    height: 8rem;
+    resize: none;
+}
+
+.edit_home_text_wrapper form button {
+    background-color: white;
+    font-size: 1.3rem;
+    padding: 3px;
+    cursor: pointer;
 }
 
 .bio_editor_wrapper .band_bio_editor {
@@ -301,6 +351,7 @@
 
 .bio_editor_wrapper .band_bio_editor .band_bio_image button {
     font-size: 1.3rem;
+    cursor: pointer;
 }
 
 .bio_editor_wrapper .band_bio_editor .band_bio_text {
@@ -315,6 +366,10 @@
     width: 100%;
     max-width: 100%;
     font-size: 1.3rem;
+}
+
+.bio_editor_wrapper .band_bio_editor .band_bio_text button {
+    cursor: pointer;
 }
 
 .bio_editor_wrapper .band_bio_editor .band_bio_text textarea {
@@ -363,7 +418,7 @@
 }
 .bio_editor_wrapper .member_bio_editor .member_bio_image button {
     font-size: 1.3rem;
-
+    cursor: pointer;
 }
 
 .bio_editor_wrapper .member_bio_editor .member_bio_text {
@@ -378,6 +433,10 @@
     width: 100%;                 
     max-width: 100%;
     font-size: 1.3rem;
+}
+
+.bio_editor_wrapper .member_bio_editor .member_bio_text button {
+    cursor: pointer;
 }
 
 .bio_editor_wrapper .member_bio_editor .member_bio_text textarea {
@@ -541,6 +600,10 @@
     box-sizing: border-box;
 }
 
+.users .table-container table td button {
+    cursor: pointer;
+}
+
 .users .table-container table tr td .delete_user {
     width: 100%;
     font-size: 1.3rem;
@@ -587,6 +650,7 @@
     .change_password_modal form button {
         align-self: flex-end;
         font-size: 1.3rem;
+        cursor: pointer;
     }
 
     .menu .nav_row {
@@ -615,6 +679,7 @@
 
     .users .add-user form button {
         font-size: 1.3rem;
+        cursor: pointer;
     }
 
     .users {
@@ -653,6 +718,7 @@
         top: 10px;
         left: auto;
         bottom: auto;
+        cursor: pointer;
     }
 
     .message_previews {
@@ -752,7 +818,11 @@
     .bio_editor_wrapper .member_bio_editor .member_bio_text input,
     .bio_editor_wrapper .member_bio_editor .member_bio_text textarea,
     .bio_editor_wrapper .member_bio_editor .member_bio_text button {
-        width: 100%;                 
+        width: 100%;          
+    }
+
+    .bio_editor_wrapper .member_bio_editor .member_bio_text button {
+        cursor: pointer;
     }
 
     .bio_editor_wrapper .member_bio_editor .member_bio_text textarea {
@@ -802,6 +872,10 @@
         width: 100%;
     }
 
+    .bio_editor_wrapper .band_bio_editor .band_bio_text button {
+        cursor: pointer;
+    }
+
     .bio_editor_wrapper .band_bio_editor .band_bio_text textarea {
         height: 8rem;
     }
@@ -823,5 +897,13 @@
         height: 100px;
     }
 
+    .edit_home_text_wrapper {
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .edit_home_text_wrapper form {
+        width: 90%;
+    }
     
 }

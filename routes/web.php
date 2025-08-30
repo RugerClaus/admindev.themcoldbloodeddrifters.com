@@ -8,6 +8,7 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\BandMembersController;
 use App\Http\Controllers\BandBioController;
 use \App\Http\Controllers\CarouselController;
+use \App\Http\Controllers\HomeController;
 
 Route::get('/', function () {
     if (!auth()->check()) {
@@ -46,6 +47,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/carousel/create', [CarouselController::class, 'create']);
     Route::post('/carousel/update', [CarouselController::class, 'update']);
     Route::post('/carousel/delete', [CarouselController::class, 'delete']);
+
+    Route::post('/home/update_left', [HomeController::class, 'update_left']);
+    Route::post('/home/update_right', [HomeController::class, 'update_right']);
 
 
     Route::post('/band/bio/update', [BandBioController::class, 'update']);

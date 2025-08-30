@@ -9,6 +9,7 @@ use App\Models\ContactMessages;
 use App\Models\BandMembers;
 use App\Models\Band;
 use App\Models\CarouselImages;
+use App\Models\HomeData;
 
 class DashboardController extends Controller
 {
@@ -21,6 +22,7 @@ class DashboardController extends Controller
         $unread_count = ContactMessages::where('read', false)->count();
         $bio = BandMembers::where('user_id',$user->id)->first();
         $band = Band::firstOrFail();
+        $home = HomeData::firstOrFail();
 
         
 
@@ -30,7 +32,9 @@ class DashboardController extends Controller
             'messages' => $messages,
             'bio' => $bio,
             'band' => $band,
-            'unread_count' => $unread_count
+            'unread_count' => $unread_count,
+            'home_text_left' => $home->left,
+            'home_text_right' => $home->right
         ];
 
         return view('dashboard', ['data' => $data]);

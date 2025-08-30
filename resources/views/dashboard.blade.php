@@ -175,6 +175,76 @@
                         </div>
                     </form>
                 </div>
+
+                <div class="divider_line"></div>
+
+                <div class="edit_home_text_wrapper">
+                    <form id="home_left_text">
+                        @csrf
+                        <label for="left">Update Left/Top Text:</label>
+                        <textarea name="left" id="left_text" class="home_text">{{$data['home_text_left']}}</textarea>
+                        <button type="submit">Update Left/Top</button>
+                    </form>
+                    <form id="home_right_text">
+                        @csrf
+                        <label for="right">Update Right/Bottom Text:</label>
+                        <textarea name="right" id="right_text" class="home_text">{{$data['home_text_right']}}</textarea>
+                        <button type="submit">Update Right/Bottom</button>
+                    </form>
+                </div>
+                <div id="home_text_status" class="img_delete_status hidden"></div>
+                <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                    const leftForm = document.getElementById("home_left_text");
+                    const rightForm = document.getElementById("home_right_text");
+                    const statusEl = document.getElementById("home_text_status");
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+                    function flash(msg) {
+                        statusEl.textContent = msg;
+                        statusEl.classList.remove('hidden');
+                        setTimeout(() => {
+                            statusEl.textContent = '';
+                            statusEl.classList.add('hidden');
+                        }, 2000);
+                    }
+
+                    async function handleSubmit(form, url) {
+                        form.addEventListener("submit", async (e) => {
+                            e.preventDefault();
+
+                            const formData = new FormData(form);
+
+                            try {
+                                const res = await fetch(url, {
+                                    method: "POST",
+                                    headers: {
+                                        "X-CSRF-TOKEN": csrfToken,
+                                        "Accept": "application/json"
+                                    },
+                                    body: formData
+                                });
+
+                                const data = await res.json();
+
+                                if (data.success) {
+                                    flash(data.message);
+                                } else {
+                                    alert("Update failed: " + (data.message || "Unknown error"));
+                                }
+
+                            } catch (err) {
+                                console.error("Error updating text:", err);
+                                alert("An error occurred while updating.");
+                            }
+                        });
+                    }
+
+                    handleSubmit(leftForm, "/home/update_left");
+                    handleSubmit(rightForm, "/home/update_right");
+                });
+                </script>
+
             </section>
             <script src="{{ asset('scripts/pages/home_editor.js') }}"></script>
         </section>
