@@ -807,14 +807,14 @@
     }
 
     .carousel_grid {
-        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
         padding: 0;
         gap: 0;
     }
     .carousel_grid .carousel_card {
         border: 1px solid white;
     }
-    .carousel_card img { height: 80px; }
+    .carousel_card img { height: 100px; }
 
     .add_card{
         height: 100px;
