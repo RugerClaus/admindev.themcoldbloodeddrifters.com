@@ -460,12 +460,20 @@
             <div class="message_previews">
                 <div class="message_preview_wrapper">
                     @foreach ($data['messages'] as $message)
-                    <div class="message_preview {{ $message->read ? 'message_read' : 'message_unread' }}" data-id="{{ $message->id }}">
-                        <div class="from"><b>From: </b>{{ $message->name }}</div>
-                        <div class="email"><b>Email: </b> {{$message->email}}</div>
-                        <div class="phone"><b>Phone: </b> {{$message->phone}}</div>
-                        <div class="message"><b>Message: </b>{{ \Illuminate\Support\Str::limit($message->body, 30) }}</div>
-                    </div>
+                        <div class="message_preview_overlay">
+                            <div class="message_preview {{ $message->read ? 'message_read' : 'message_unread' }}" data-id="{{ $message->id }}">
+                                <div class="from"><b>From: </b>{{ $message->name }}</div>
+                                <div class="email"><b>Email: </b> {{$message->email}}</div>
+                                <div class="phone"><b>Phone: </b> {{$message->phone}}</div>
+                                <div class="message"><b>Message: </b>{{ \Illuminate\Support\Str::limit($message->body, 30) }}</div>
+                            </div>
+
+                            <div class="overlay_controls">
+                                <button class="delete_btn" data-id="{{ $message->id }}">
+                                    <img src="{{asset('assets/icons/trash.png')}}" alt="Delete" />
+                                </button>
+                            </div>
+                        </div>
                     @endforeach
                 </div>
             </div>
@@ -478,15 +486,56 @@
                         const data = await res.json();
                         document.getElementById('unread_count').textContent = `(${data.unread_count})`;
                     } catch (err) {
-                        console.error(err);
+                        console.error("Unread count error:", err);
                     }
                 }
                 setInterval(fetchUnreadCount, 3000);
+
                 const container = document.querySelector('.message_preview_wrapper');
                 const mobileViewer = document.querySelector('.mobile_message_viewer');
                 const desktopViewer = document.querySelector('.message_viewer');
 
                 container.addEventListener('click', async e => {
+
+                    const deleteBtn = e.target.closest('.delete_btn');
+                        if (deleteBtn) {
+                            e.stopPropagation();
+                            const id = deleteBtn.dataset.id;
+
+                            try {
+                                const res = await fetch(`/messages/delete`, {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                                    },
+                                    body: JSON.stringify({ id })
+                                });
+
+                                let data;
+                                try {
+                                    data = await res.json();
+                                } catch (err) {
+                                    const text = await res.text();
+                                    console.error('Server response is not JSON:', text);
+                                    alert('Server returned unexpected response. Check console.');
+                                    return;
+                                }
+
+                                if (data.success) {
+                                    deleteBtn.closest('.message_preview_overlay').remove();
+                                } else {
+                                    alert('Failed to delete message: ' + (data.error || 'Unknown error'));
+                                }
+                            } catch (err) {
+                                console.error('Delete request error:', err);
+                                alert('Network or server error occurred. Check console.');
+                            }
+
+                            return; 
+                        }
+
+                    
                     const message = e.target.closest('.message_preview');
                     if (!message) return;
 
@@ -530,7 +579,7 @@
                             });
                         }
                     } catch (err) {
-                        console.error('Error:', err);
+                        console.error('Open message error:', err);
                     }
                 });
 
@@ -542,27 +591,35 @@
                         messages.forEach(msg => {
                             if (document.querySelector(`[data-id="${msg.id}"]`)) return;
 
-                            const div = document.createElement("div");
-                            div.classList.add("message_preview", msg.read ? "message_read" : "message_unread");
-                            div.dataset.id = msg.id;
+                            const overlay = document.createElement("div");
+                            overlay.classList.add("message_preview_overlay");
+                            overlay.dataset.id = msg.id;
 
                             const shortBody = msg.body.length > 30 ? msg.body.substring(0, 30) + "…" : msg.body;
 
-                            div.innerHTML = `
-                                <div class="from"><b>From: </b>${msg.name}</div>
-                                <div class="email"><b>Email:</b>&nbsp;${msg.email}</div>
-                                <div class="phone"><b>Phone:</b>&nbsp;${msg.phone}</div>
-                                <div class="message"><b>Message:</b>&nbsp;${shortBody}</div>
+                            overlay.innerHTML = `
+                                <div class="message_preview ${msg.read ? "message_read" : "message_unread"}" data-id="${msg.id}">
+                                    <div class="from"><b>From: </b>${msg.name}</div>
+                                    <div class="email"><b>Email:</b>&nbsp;${msg.email}</div>
+                                    <div class="phone"><b>Phone:</b>&nbsp;${msg.phone}</div>
+                                    <div class="message"><b>Message:</b>&nbsp;${shortBody}</div>
+                                </div>
+                                <div class="overlay_controls">
+                                    <button class="delete_btn" data-id="${msg.id}">
+                                        <img src="/assets/icons/trash.png" alt="Delete" />
+                                    </button>
+                                    <input type="checkbox" class="select_message" data-id="${msg.id}">
+                                </div>
                             `;
 
-                            container.prepend(div);
+                            container.prepend(overlay);
                         });
                     } catch (err) {
                         console.error("Polling error:", err);
                     }
                 }
-
                 setInterval(pollMessages, 5000);
+
             </script>
         </section>
         <section id="user_editor" class="page hidden">

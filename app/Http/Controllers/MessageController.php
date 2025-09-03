@@ -47,4 +47,16 @@ class MessageController extends Controller
         $count = ContactMessages::where('read', false)->count();
         return response()->json(['unread_count' => $count]);
     }
+    public function delete(Request $request)
+    {
+        $message = ContactMessages::find($request->id);
+
+        if (!$message) {
+            return response()->json(['success' => false, 'error' => 'Message not found']);
+        }
+
+        $message->delete();
+
+        return response()->json(['success' => true]);
+    }
 }
