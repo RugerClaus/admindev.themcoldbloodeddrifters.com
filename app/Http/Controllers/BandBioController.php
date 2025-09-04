@@ -37,7 +37,7 @@ class BandBioController extends Controller
 
         if ($request->hasFile('bio_image') && $request->file('bio_image')->isValid()) {
             $image_path = $request->file('bio_image')->store('band/bio', 'media');
-            $updateData['image_url'] = Storage::disk('media')->url($image_path);
+            $updateData['image'] = Storage::disk('media')->url($image_path);
         }
 
         if (!empty($request->bio_imgalt)) {
