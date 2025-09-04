@@ -58,13 +58,13 @@ class BandBioController extends Controller
     {
         $band = Band::firstOrFail();
 
-        if ($band->image_url) {
-            $path = str_replace(Storage::disk('media')->url(''), '', $band->image_url);
+        if ($band->image) {
+            $path = str_replace(Storage::disk('media')->url(''), '', $band->image);
             if (Storage::disk('media')->exists($path)) {
                 Storage::disk('media')->delete($path);
             }
 
-            $band->image_url = 'https://placehold.co/600x400';
+            $band->image = 'https://placehold.co/600x400';
             $band->save();
         }
 
