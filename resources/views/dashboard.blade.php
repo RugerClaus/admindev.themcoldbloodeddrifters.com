@@ -289,7 +289,7 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            document.getElementById('band_image').src = 'https://placehold.co/600x400';
+                            document.getElementById('band_image').src = 'https://placehold.co/1280x720?text=Band+Photo';
                             document.getElementById('band_image_status').textContent = `${data.message}`;
                             document.getElementById('band_image_status').classList.remove('hidden')
                             setTimeout(() => {

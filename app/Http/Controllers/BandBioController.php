@@ -66,7 +66,7 @@ class BandBioController extends Controller
                 Storage::disk('media')->delete($path);
             }
 
-            $band->image = 'https://placehold.co/600x400';
+            $band->image = 'https://placehold.co/1280x720?text=Band+Photo';
             $band->save();
         }
 
