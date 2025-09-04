@@ -59,7 +59,6 @@ class BandBioController extends Controller
         $band = Band::firstOrFail();
 
         if ($band->image) {
-            // Convert full URL back into relative storage path
             $mediaUrl = Storage::disk('media')->url('/');
             $path = str_replace($mediaUrl, '', $band->image);
 

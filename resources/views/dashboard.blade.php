@@ -280,7 +280,7 @@
                 // Handle image deletion
                 document.getElementById('delete_band_image').addEventListener('click', function() {
                     fetch('/band/bio/delete_image', {
-                        method: 'DELETE',
+                        method: 'POST',
                         headers: {
                             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
                             'Accept': 'application/json'
