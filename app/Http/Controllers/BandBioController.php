@@ -59,7 +59,10 @@ class BandBioController extends Controller
         $band = Band::firstOrFail();
 
         if ($band->image) {
-            $path = str_replace(Storage::disk('media')->url(''), '', $band->image);
+            // Convert full URL back into relative storage path
+            $mediaUrl = Storage::disk('media')->url('/');
+            $path = str_replace($mediaUrl, '', $band->image);
+
             if (Storage::disk('media')->exists($path)) {
                 Storage::disk('media')->delete($path);
             }
@@ -73,4 +76,5 @@ class BandBioController extends Controller
             'message' => 'Band image deleted successfully.',
         ]);
     }
+
 }
