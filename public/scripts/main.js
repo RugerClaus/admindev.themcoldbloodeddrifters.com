@@ -4,7 +4,7 @@ function showPage(target) {
     document.querySelectorAll('.page').forEach(page => page.classList.add('hidden'));
     document.getElementById(target).classList.remove('hidden')
     document.querySelector('.menu').classList.add('hidden')
-    document.querySelector('.logout_form').classList.add('hidden')
+    document.getElementById('logout').classList.add('hidden')
 }
 
 document.querySelectorAll('.card').forEach(card => {
@@ -19,7 +19,7 @@ document.querySelectorAll('.close_section_button').forEach(button => {
     button.addEventListener('click', () => {
         document.querySelectorAll('.page').forEach(page => page.classList.add('hidden'))
         document.querySelector('.menu').classList.remove('hidden')
-        document.querySelector('.logout_form').classList.remove('hidden')
+        document.getElementById('logout').classList.remove('hidden')
         window.location.hash = ''
     })
 })
@@ -27,9 +27,6 @@ document.querySelectorAll('.close_section_button').forEach(button => {
 if (window.location.hash) {
     const target = window.location.hash.substring(1)
     showPage(target)
-}
-else{
-    document.querySelector('.logout_form').classList.remove('hidden')
 }
 window.addEventListener('hashchange', () => {
     const target = window.location.hash.substring(1)

@@ -8,7 +8,7 @@
         <title>{{$data['user']->username}} - Dashboard</title>
     </head>
     <body>
-        <form action="{{ route('logout') }}" method="POST" class="logout_form">
+        <form action="{{ route('logout') }}" method="POST" class="logout_form" id="logout">
             @csrf
             <button type="submit">Logout</button>
         </form>
