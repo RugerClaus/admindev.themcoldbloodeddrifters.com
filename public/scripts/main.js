@@ -1,5 +1,12 @@
 const body = document.querySelector('body')
 
+const logout_form = document.querySelector('.logout_form')
+
+if (window.location.hash == '')
+{
+    logout_form.classList.remove('hidden')
+}
+
 function showPage(target) {
     document.querySelectorAll('.page').forEach(page => page.classList.add('hidden'));
     document.getElementById(target).classList.remove('hidden')
