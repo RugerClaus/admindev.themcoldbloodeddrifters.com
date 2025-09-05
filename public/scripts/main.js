@@ -1,12 +1,5 @@
 const body = document.querySelector('body')
 
-const logout_form = document.querySelector('.logout_form')
-
-if (window.location.hash == '')
-{
-    logout_form.classList.remove('hidden')
-}
-
 function showPage(target) {
     document.querySelectorAll('.page').forEach(page => page.classList.add('hidden'));
     document.getElementById(target).classList.remove('hidden')
@@ -34,6 +27,9 @@ document.querySelectorAll('.close_section_button').forEach(button => {
 if (window.location.hash) {
     const target = window.location.hash.substring(1)
     showPage(target)
+}
+else{
+    document.querySelector('.logout_form').classList.remove('hidden')
 }
 window.addEventListener('hashchange', () => {
     const target = window.location.hash.substring(1)
