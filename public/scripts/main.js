@@ -35,5 +35,6 @@ window.addEventListener('hashchange', () => {
     } else {
         document.querySelectorAll('.page').forEach(page => page.classList.add('hidden'))
         document.querySelector('.menu').classList.remove('hidden')
+        document.getElementById('logout').classList.remove('hidden')
     }
 })
